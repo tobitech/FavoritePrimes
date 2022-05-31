@@ -48,6 +48,26 @@
                ReferencedContainer = "container:PrimeTime.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "208A02AB28465D10006FF83E"
+               BuildableName = "FavoritePrimesTests.xctest"
+               BlueprintName = "FavoritePrimesTests"
+               ReferencedContainer = "container:PrimeTime.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "208A02CD28465D74006FF83E"
+               BuildableName = "ComposableArchitectureTests.xctest"
+               BlueprintName = "ComposableArchitectureTests"
+               ReferencedContainer = "container:PrimeTime.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
