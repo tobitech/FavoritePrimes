@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Another higher order reducer that is a bit more domain specific.
+/// This is responsible for appending activities to our app's state activities upon receiving certain actions.
 func activityFeed(
   _ reducer: @escaping (inout AppState, AppAction) -> Void
 ) -> (inout AppState, AppAction) -> Void {

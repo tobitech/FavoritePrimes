@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// One of two functions that form the foundation of reducer composition.
+/// This lets us transform a reducer that understands local state and actions into one that understands global states and actions.
 func pullback<LocalValue, GlobalValue, LocalAction, GlobalAction>(
   _ reducer: @escaping (inout LocalValue, LocalAction) -> Void,
   value: WritableKeyPath<GlobalValue, LocalValue>,

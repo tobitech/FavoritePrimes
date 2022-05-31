@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Each of our app's reducers is put together in our App's mega reducer by pulling back each of this more focused reducers and combining them.
 let _appReducer: (inout AppState, AppAction) -> Void = combine(
   pullback(counterReducer, value: \.count, action: \.counter),
   pullback(primeModalReducer, value: \.self, action: \.primeModal),

@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// All the individual screen's action are embedded here.
+/// We use a code generation tool to generate what is known as enum properties.
+/// These are computed properties that bridge the ergonomic gap between `structs` and `enums` by providing dot syntax access to an enum's associate value.
+/// With these properties defined, Swift automatically synthensizes key paths which allows us to pull reducers of location actions back to reducers of global actions.
 enum AppAction {
   case counter(CounterAction)
   case primeModal(PrimeModalAction)

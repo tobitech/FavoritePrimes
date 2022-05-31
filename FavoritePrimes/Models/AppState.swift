@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// This models our entire app's state in a simple value type.
 struct AppState {
   var count = 0
   var favoritePrimes: [Int] = []

@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// One of two functions that form the foundation of reducer composition.
+/// This combine function allows us join multiple reducers together into a single mega reducer.
 func combine<Value, Action>(
   _ reducers: (inout Value, Action) -> Void...
 ) -> (inout Value, Action) -> Void {
