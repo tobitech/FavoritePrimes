@@ -27,6 +27,8 @@
 		208A02E72846666F006FF83E /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142EF284639CC00E9C574 /* Logging.swift */; };
 		208A02E8284667B0006FF83E /* FavoritePrimesReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205C8AAE28465A5F00FBA60C /* FavoritePrimesReducer.swift */; };
 		208A02E9284667C9006FF83E /* FavoritePrimesAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205C8AB028465A7300FBA60C /* FavoritePrimesAction.swift */; };
+		208A02EA28466914006FF83E /* CounterAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F628463A5500E9C574 /* CounterAction.swift */; };
+		208A02EB28466917006FF83E /* CounterReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142FC28463AB200E9C574 /* CounterReducer.swift */; };
 		20C142D82846372500E9C574 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142D72846372500E9C574 /* ContentView.swift */; };
 		20C142DA2846372600E9C574 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20C142D92846372600E9C574 /* Assets.xcassets */; };
 		20C142DD2846372600E9C574 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20C142DC2846372600E9C574 /* Preview Assets.xcassets */; };
@@ -36,9 +38,7 @@
 		20C142ED284639A200E9C574 /* PrimeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142EC284639A200E9C574 /* PrimeAlert.swift */; };
 		20C142F228463A0400E9C574 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F128463A0400E9C574 /* AppState.swift */; };
 		20C142F528463A3F00E9C574 /* AppAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F428463A3F00E9C574 /* AppAction.swift */; };
-		20C142F728463A5500E9C574 /* CounterAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F628463A5500E9C574 /* CounterAction.swift */; };
 		20C142F928463A6800E9C574 /* PrimeModalAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F828463A6800E9C574 /* PrimeModalAction.swift */; };
-		20C142FD28463AB200E9C574 /* CounterReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142FC28463AB200E9C574 /* CounterReducer.swift */; };
 		20C142FF28463AC400E9C574 /* PrimeModalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142FE28463AC400E9C574 /* PrimeModalReducer.swift */; };
 		20C1430A28463B8200E9C574 /* KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430928463B8200E9C574 /* KeyPath.swift */; };
 		20C1430C28463B9B00E9C574 /* EnumKeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430B28463B9B00E9C574 /* EnumKeyPath.swift */; };
@@ -414,7 +414,6 @@
 			isa = PBXGroup;
 			children = (
 				20C1430D28463BC400E9C574 /* ActivityFeed.swift */,
-				20C142FC28463AB200E9C574 /* CounterReducer.swift */,
 				20C142FE28463AC400E9C574 /* PrimeModalReducer.swift */,
 			);
 			path = Reducers;
@@ -424,7 +423,6 @@
 			isa = PBXGroup;
 			children = (
 				20C142F428463A3F00E9C574 /* AppAction.swift */,
-				20C142F628463A5500E9C574 /* CounterAction.swift */,
 				20C142F828463A6800E9C574 /* PrimeModalAction.swift */,
 			);
 			path = Actions;
@@ -443,6 +441,8 @@
 		20C143172846566600E9C574 /* Counter */ = {
 			isa = PBXGroup;
 			children = (
+				20C142F628463A5500E9C574 /* CounterAction.swift */,
+				20C142FC28463AB200E9C574 /* CounterReducer.swift */,
 				20C143182846566600E9C574 /* Counter.h */,
 				20C143192846566600E9C574 /* Counter.docc */,
 			);
@@ -874,8 +874,6 @@
 				205C8AAD28465A3900FBA60C /* PrimeTimeApp.swift in Sources */,
 				20C1430E28463BC400E9C574 /* ActivityFeed.swift in Sources */,
 				20C142F928463A6800E9C574 /* PrimeModalAction.swift in Sources */,
-				20C142FD28463AB200E9C574 /* CounterReducer.swift in Sources */,
-				20C142F728463A5500E9C574 /* CounterAction.swift in Sources */,
 				20C142F528463A3F00E9C574 /* AppAction.swift in Sources */,
 				20C142ED284639A200E9C574 /* PrimeAlert.swift in Sources */,
 				20C142EA2846394D00E9C574 /* CounterView.swift in Sources */,
@@ -886,6 +884,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				208A02EA28466914006FF83E /* CounterAction.swift in Sources */,
+				208A02EB28466917006FF83E /* CounterReducer.swift in Sources */,
 				20C1431A2846566600E9C574 /* Counter.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

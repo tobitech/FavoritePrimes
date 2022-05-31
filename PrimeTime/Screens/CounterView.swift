@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Counter
 import SwiftUI
 
 struct CounterView: View {

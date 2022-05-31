@@ -8,7 +8,7 @@
 import Foundation
 
 /// Enums that define app actions in various components on the screen.
-enum CounterAction {
+public enum CounterAction {
   case decrTapped
   case incrTapped
 }
