@@ -5,6 +5,7 @@
 //  Created by Oluwatobi Omotayo on 31/05/2022.
 //
 
+import ComposableArchitecture
 import SwiftUI
 
 struct IsPrimeModalView: View {

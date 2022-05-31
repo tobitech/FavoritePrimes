@@ -22,6 +22,11 @@
 		208A02D728465D74006FF83E /* ComposableArchitecture.h in Headers */ = {isa = PBXBuildFile; fileRef = 208A02C728465D74006FF83E /* ComposableArchitecture.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		208A02DA28465D74006FF83E /* ComposableArchitecture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 208A02C528465D74006FF83E /* ComposableArchitecture.framework */; };
 		208A02DB28465D74006FF83E /* ComposableArchitecture.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 208A02C528465D74006FF83E /* ComposableArchitecture.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		208A02E328465DC4006FF83E /* ComposableArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208A02E228465DC4006FF83E /* ComposableArchitecture.swift */; };
+		208A02E4284665CA006FF83E /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430528463B5500E9C574 /* Store.swift */; };
+		208A02E5284665D4006FF83E /* Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430328463B3E00E9C574 /* Combine.swift */; };
+		208A02E6284665D8006FF83E /* Pullback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430728463B6900E9C574 /* Pullback.swift */; };
+		208A02E72846666F006FF83E /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142EF284639CC00E9C574 /* Logging.swift */; };
 		20C142D82846372500E9C574 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142D72846372500E9C574 /* ContentView.swift */; };
 		20C142DA2846372600E9C574 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20C142D92846372600E9C574 /* Assets.xcassets */; };
 		20C142DD2846372600E9C574 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20C142DC2846372600E9C574 /* Preview Assets.xcassets */; };
@@ -29,16 +34,12 @@
 		20C142E82846393400E9C574 /* IsPrimeModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142E72846393400E9C574 /* IsPrimeModalView.swift */; };
 		20C142EA2846394D00E9C574 /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142E92846394D00E9C574 /* CounterView.swift */; };
 		20C142ED284639A200E9C574 /* PrimeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142EC284639A200E9C574 /* PrimeAlert.swift */; };
-		20C142F0284639CC00E9C574 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142EF284639CC00E9C574 /* Logging.swift */; };
 		20C142F228463A0400E9C574 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F128463A0400E9C574 /* AppState.swift */; };
 		20C142F528463A3F00E9C574 /* AppAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F428463A3F00E9C574 /* AppAction.swift */; };
 		20C142F728463A5500E9C574 /* CounterAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F628463A5500E9C574 /* CounterAction.swift */; };
 		20C142F928463A6800E9C574 /* PrimeModalAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142F828463A6800E9C574 /* PrimeModalAction.swift */; };
 		20C142FD28463AB200E9C574 /* CounterReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142FC28463AB200E9C574 /* CounterReducer.swift */; };
 		20C142FF28463AC400E9C574 /* PrimeModalReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C142FE28463AC400E9C574 /* PrimeModalReducer.swift */; };
-		20C1430428463B3E00E9C574 /* Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430328463B3E00E9C574 /* Combine.swift */; };
-		20C1430628463B5500E9C574 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430528463B5500E9C574 /* Store.swift */; };
-		20C1430828463B6900E9C574 /* Pullback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430728463B6900E9C574 /* Pullback.swift */; };
 		20C1430A28463B8200E9C574 /* KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430928463B8200E9C574 /* KeyPath.swift */; };
 		20C1430C28463B9B00E9C574 /* EnumKeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430B28463B9B00E9C574 /* EnumKeyPath.swift */; };
 		20C1430E28463BC400E9C574 /* ActivityFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C1430D28463BC400E9C574 /* ActivityFeed.swift */; };
@@ -175,6 +176,7 @@
 		208A02C828465D74006FF83E /* ComposableArchitecture.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = ComposableArchitecture.docc; sourceTree = "<group>"; };
 		208A02CE28465D74006FF83E /* ComposableArchitectureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ComposableArchitectureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		208A02D528465D74006FF83E /* ComposableArchitectureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposableArchitectureTests.swift; sourceTree = "<group>"; };
+		208A02E228465DC4006FF83E /* ComposableArchitecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposableArchitecture.swift; sourceTree = "<group>"; };
 		20C142D22846372500E9C574 /* PrimeTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrimeTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20C142D72846372500E9C574 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		20C142D92846372600E9C574 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -304,6 +306,11 @@
 		208A02C628465D74006FF83E /* ComposableArchitecture */ = {
 			isa = PBXGroup;
 			children = (
+				20C1430328463B3E00E9C574 /* Combine.swift */,
+				208A02E228465DC4006FF83E /* ComposableArchitecture.swift */,
+				20C142EF284639CC00E9C574 /* Logging.swift */,
+				20C1430728463B6900E9C574 /* Pullback.swift */,
+				20C1430528463B5500E9C574 /* Store.swift */,
 				208A02C728465D74006FF83E /* ComposableArchitecture.h */,
 				208A02C828465D74006FF83E /* ComposableArchitecture.docc */,
 			);
@@ -397,7 +404,6 @@
 			children = (
 				20C142F128463A0400E9C574 /* AppState.swift */,
 				20C142EC284639A200E9C574 /* PrimeAlert.swift */,
-				20C1430528463B5500E9C574 /* Store.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -408,7 +414,6 @@
 				20C1430D28463BC400E9C574 /* ActivityFeed.swift */,
 				20C142FC28463AB200E9C574 /* CounterReducer.swift */,
 				205C8AAE28465A5F00FBA60C /* FavoritePrimesReducer.swift */,
-				20C142EF284639CC00E9C574 /* Logging.swift */,
 				20C142FE28463AC400E9C574 /* PrimeModalReducer.swift */,
 			);
 			path = Reducers;
@@ -428,10 +433,8 @@
 		20C1430228463AFB00E9C574 /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				20C1430328463B3E00E9C574 /* Combine.swift */,
 				20C1430B28463B9B00E9C574 /* EnumKeyPath.swift */,
 				20C1430928463B8200E9C574 /* KeyPath.swift */,
-				20C1430728463B6900E9C574 /* Pullback.swift */,
 				20C1430F28463C7100E9C574 /* Utils.swift */,
 			);
 			path = Library;
@@ -837,7 +840,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				208A02E4284665CA006FF83E /* Store.swift in Sources */,
+				208A02E72846666F006FF83E /* Logging.swift in Sources */,
+				208A02E5284665D4006FF83E /* Combine.swift in Sources */,
+				208A02E6284665D8006FF83E /* Pullback.swift in Sources */,
 				208A02C928465D74006FF83E /* ComposableArchitecture.docc in Sources */,
+				208A02E328465DC4006FF83E /* ComposableArchitecture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -859,7 +867,6 @@
 				205C8AB128465A7300FBA60C /* FavoritePrimesAction.swift in Sources */,
 				20C142E82846393400E9C574 /* IsPrimeModalView.swift in Sources */,
 				20C142FF28463AC400E9C574 /* PrimeModalReducer.swift in Sources */,
-				20C1430428463B3E00E9C574 /* Combine.swift in Sources */,
 				20C1431028463C7100E9C574 /* Utils.swift in Sources */,
 				20C1430C28463B9B00E9C574 /* EnumKeyPath.swift in Sources */,
 				20C142F228463A0400E9C574 /* AppState.swift in Sources */,
@@ -868,11 +875,8 @@
 				20C1430E28463BC400E9C574 /* ActivityFeed.swift in Sources */,
 				20C142F928463A6800E9C574 /* PrimeModalAction.swift in Sources */,
 				20C142FD28463AB200E9C574 /* CounterReducer.swift in Sources */,
-				20C1430628463B5500E9C574 /* Store.swift in Sources */,
-				20C1430828463B6900E9C574 /* Pullback.swift in Sources */,
 				20C142F728463A5500E9C574 /* CounterAction.swift in Sources */,
 				20C142F528463A3F00E9C574 /* AppAction.swift in Sources */,
-				20C142F0284639CC00E9C574 /* Logging.swift in Sources */,
 				20C142ED284639A200E9C574 /* PrimeAlert.swift in Sources */,
 				20C142EA2846394D00E9C574 /* CounterView.swift in Sources */,
 			);
@@ -1285,6 +1289,7 @@
 		20C142E12846372600E9C574 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -1314,6 +1319,7 @@
 		20C142E22846372600E9C574 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
