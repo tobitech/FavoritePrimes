@@ -7,7 +7,17 @@
 
 import Foundation
 
-func primeModalReducer(state: inout AppState, action: PrimeModalAction) {
+public struct PrimeModalState {
+  public var count: Int
+  public var favoritePrimes: [Int]
+  
+  public init(count: Int, favoritePrimes: [Int]) {
+    self.count = count
+    self.favoritePrimes = favoritePrimes
+  }
+}
+
+public func primeModalReducer(state: inout PrimeModalState, action: PrimeModalAction) {
   switch action {
   case .removeFavoritePrimeTapped:
     state.favoritePrimes.removeAll(where: { $0 == state.count })

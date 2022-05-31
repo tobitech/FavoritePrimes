@@ -8,6 +8,7 @@
 import Counter
 import FavoritePrimes
 import Foundation
+import PrimeModal
 
 /// All the individual screen's action are embedded here.
 /// We use a code generation tool to generate what is known as enum properties.

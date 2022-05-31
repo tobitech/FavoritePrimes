@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PrimeModal
 
 /// This models our entire app's state in a simple value type.
 struct AppState {
@@ -50,5 +51,20 @@ struct AppState {
     let id: Int
     let name: String
     let bio: String
+  }
+}
+
+extension AppState {
+  var primeModal: PrimeModalState {
+    get {
+      PrimeModalState(
+        count: self.count,
+        favoritePrimes: self.favoritePrimes
+      )
+    }
+    set {
+      self.count = newValue.count
+      self.favoritePrimes = newValue.favoritePrimes
+    }
   }
 }
