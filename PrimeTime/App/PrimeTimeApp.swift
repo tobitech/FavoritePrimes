@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FavoritePrimes
 import SwiftUI
 
 /// Each of our app's reducers is put together in our App's mega reducer by pulling back each of this more focused reducers and combining them.

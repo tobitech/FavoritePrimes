@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FavoritePrimes
 import SwiftUI
 
 struct FavoritePrimesView: View {
