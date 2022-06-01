@@ -6,19 +6,27 @@
 //
 
 import ComposableArchitecture
-import Counter
 import SwiftUI
 import PrimeModal
 
-typealias CounterViewState = (count: Int, favoritePrimes: [Int])
+public typealias CounterViewState = (count: Int, favoritePrimes: [Int])
 
-struct CounterView: View {
-  @ObservedObject var store: Store<CounterViewState, AppAction>
+public enum CounterViewAction {
+  case counter(CounterAction)
+  case primeModal(PrimeModalAction)
+}
+
+public struct CounterView: View {
+  @ObservedObject var store: Store<CounterViewState, CounterViewAction>
   @State var isPrimeModalShown = false
   @State var alertNthPrime: PrimeAlert?
   @State var isNthPrimeButtonDisabled = false
   
-  var body: some View {
+  public init(store: Store<CounterViewState, CounterViewAction>) {
+    self.store = store
+  }
+  
+  public var body: some View {
     VStack {
       HStack {
         Button("-") { self.store.send(.counter(.decrTapped)) }
@@ -36,7 +44,10 @@ struct CounterView: View {
     .navigationBarTitle("Counter demo")
     .sheet(isPresented: self.$isPrimeModalShown) {
       IsPrimeModalView(
-        store: self.store.view { PrimeModalState(count: $0.count, favoritePrimes: $0.favoritePrimes) }
+        store: self.store.view(
+          value: { PrimeModalState(count: $0.count, favoritePrimes: $0.favoritePrimes) },
+          action: { .primeModal($0) }
+        )
       )
     }
     .alert(item: self.$alertNthPrime) { alert in
@@ -54,6 +65,29 @@ struct CounterView: View {
       self.isNthPrimeButtonDisabled = false
     }
   }
+}
+
+func nthPrime(_ n: Int, callback: @escaping (Int?) -> Void) -> Void {
+  wolframAlpha(query: "prime \(n)") { result in
+    callback(
+      result
+        .flatMap {
+          $0.queryresult
+            .pods
+            .first(where: { $0.primary == .some(true) })?
+            .subpods
+            .first?
+            .plaintext
+        }
+        .flatMap(Int.init)
+    )
+  }
+}
+
+func ordinal(_ n: Int) -> String {
+  let formatter = NumberFormatter()
+  formatter.numberStyle = .ordinal
+  return formatter.string(for: n) ?? ""
 }
 
 //struct CounterView_Previews: PreviewProvider {

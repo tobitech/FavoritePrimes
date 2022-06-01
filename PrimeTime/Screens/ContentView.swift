@@ -6,6 +6,8 @@
 //
 
 import ComposableArchitecture
+import Counter
+import FavoritePrimes
 import SwiftUI
 
 struct ContentView: View {
@@ -17,13 +19,26 @@ struct ContentView: View {
         NavigationLink(
           "Counter demo",
           destination: CounterView(
-            store: self.store.view { ($0.count, $0.favoritePrimes) }
+            store: self.store.view(
+              value: { ($0.count, $0.favoritePrimes) },
+              action: {
+                switch $0 {
+                case let .counter(action):
+                  return AppAction.counter(action)
+                case let .primeModal(action):
+                  return AppAction.primeModal(action)
+                }
+              }
+            )
           )
         )
         NavigationLink(
           "Favorite primes",
           destination: FavoritePrimesView(
-            store: self.store.view { $0.favoritePrimes }
+            store: self.store.view(
+              value: { $0.favoritePrimes },
+              action: { .favoritePrimes($0) }
+            )
           )
         )
       }
