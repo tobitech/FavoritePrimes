@@ -7,9 +7,10 @@
 
 import ComposableArchitecture
 import SwiftUI
+import PrimeModal
 
 struct IsPrimeModalView: View {
-  @ObservedObject var store: Store<AppState, AppAction>
+  @ObservedObject var store: Store<PrimeModalState, AppAction>
   
   var body: some View {
     VStack {
@@ -31,20 +32,20 @@ struct IsPrimeModalView: View {
   }
 }
 
-struct IsPrimeModalView_Previews: PreviewProvider {
-
-  static var previews: some View {
-    IsPrimeModalView(
-      store: Store(
-        initialValue: AppState(),
-        reducer: with(
-          appReducer,
-          compose(
-            logging,
-            activityFeed
-          )
-        )
-      )
-    )
-  }
-}
+//struct IsPrimeModalView_Previews: PreviewProvider {
+//
+//  static var previews: some View {
+//    IsPrimeModalView(
+//      store: Store(
+//        initialValue: AppState(),
+//        reducer: with(
+//          appReducer,
+//          compose(
+//            logging,
+//            activityFeed
+//          )
+//        )
+//      )
+//    )
+//  }
+//}

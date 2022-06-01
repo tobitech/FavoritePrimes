@@ -16,11 +16,15 @@ struct ContentView: View {
       List {
         NavigationLink(
           "Counter demo",
-          destination: CounterView(store: self.store)
+          destination: CounterView(
+            store: self.store.view { ($0.count, $0.favoritePrimes) }
+          )
         )
         NavigationLink(
           "Favorite primes",
-          destination: FavoritePrimesView(store: self.store)
+          destination: FavoritePrimesView(
+            store: self.store.view { $0.favoritePrimes }
+          )
         )
       }
       .navigationBarTitle("State management")
