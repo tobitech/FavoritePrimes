@@ -28,15 +28,16 @@ public struct FavoritePrimesView: View {
     .navigationBarItems(
       trailing: HStack {
         Button("Save") {
-          // In here we will perform the side effect that saves the favourite primes to disk.
-          // we want to be able to serialise the primes.
-          let data = try! JSONEncoder().encode(self.store.value)
-          
-          // we want to save this data to a consistent url in the document directory.
-          let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-          let documentsUrl = URL(fileURLWithPath: documentsPath)
-          let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
-          try! data.write(to: favoritePrimesUrl)
+          self.store.send(.saveButtonTapped)
+//          // In here we will perform the side effect that saves the favourite primes to disk.
+//          // we want to be able to serialise the primes.
+//          let data = try! JSONEncoder().encode(self.store.value)
+//
+//          // we want to save this data to a consistent url in the document directory.
+//          let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//          let documentsUrl = URL(fileURLWithPath: documentsPath)
+//          let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
+//          try! data.write(to: favoritePrimesUrl)
         }
         
         Button("Load") {
@@ -53,3 +54,14 @@ public struct FavoritePrimesView: View {
     )
   }
 }
+
+//struct FavoritePrimes_Preview: PreviewProvider {
+//  static var previews: some View {
+//    FavoritePrimesView(
+//      store: Store<[Int], FavoritePrimesAction>(
+//        initialValue: [],
+//        reducer: favoritePrimesReducer
+//      )
+//    )
+//  }
+//}
