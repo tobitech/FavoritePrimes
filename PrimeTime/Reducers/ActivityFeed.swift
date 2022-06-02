@@ -15,7 +15,8 @@ func activityFeed(
   
   return { state, action in
     switch action {
-    case .counterView(.counter):
+    case .counterView(.counter),
+        .favoritePrimes(.loadedFavoritePrimes):
       break
     case .counterView(.primeModal(.removeFavoritePrimeTapped)):
       state.activityFeed.append(.init(timestamp: Date(), type: .removedFavoritePrime(state.count)))

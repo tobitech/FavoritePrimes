@@ -13,5 +13,7 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
     for index in indexSet {
       state.remove(at: index)
     }
+  case let .loadedFavoritePrimes(favoritePrimes):
+    state = favoritePrimes
   }
 }
