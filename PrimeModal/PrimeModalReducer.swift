@@ -7,15 +7,17 @@
 
 import Foundation
 
-public struct PrimeModalState {
-  public var count: Int
-  public var favoritePrimes: [Int]
-  
-  public init(count: Int, favoritePrimes: [Int]) {
-    self.count = count
-    self.favoritePrimes = favoritePrimes
-  }
-}
+public typealias PrimeModalState = (count: Int, favoritePrimes: [Int])
+
+//public struct PrimeModalState {
+//  public var count: Int
+//  public var favoritePrimes: [Int]
+//
+//  public init(count: Int, favoritePrimes: [Int]) {
+//    self.count = count
+//    self.favoritePrimes = favoritePrimes
+//  }
+//}
 
 public func primeModalReducer(state: inout PrimeModalState, action: PrimeModalAction) {
   switch action {

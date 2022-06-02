@@ -7,6 +7,7 @@
 
 import Foundation
 import PrimeModal
+import Counter
 
 /// This models our entire app's state in a simple value type.
 struct AppState {
@@ -55,9 +56,9 @@ struct AppState {
 }
 
 extension AppState {
-  var primeModal: PrimeModalState {
+  var counterView: CounterViewState {
     get {
-      PrimeModalState(
+      CounterViewState(
         count: self.count,
         favoritePrimes: self.favoritePrimes
       )

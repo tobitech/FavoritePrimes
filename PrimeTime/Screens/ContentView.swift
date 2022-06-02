@@ -20,15 +20,8 @@ struct ContentView: View {
           "Counter demo",
           destination: CounterView(
             store: self.store.view(
-              value: { ($0.count, $0.favoritePrimes) },
-              action: {
-                switch $0 {
-                case let .counter(action):
-                  return AppAction.counter(action)
-                case let .primeModal(action):
-                  return AppAction.primeModal(action)
-                }
-              }
+              value: { $0.counterView },
+              action: { .counterView($0) }
             )
           )
         )

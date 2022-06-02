@@ -164,6 +164,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2000A9C02848996600F47ABD /* PrimeTime.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PrimeTime.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		205C8AAC28465A3900FBA60C /* PrimeTimeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimeTimeApp.swift; sourceTree = "<group>"; };
 		205C8AAE28465A5F00FBA60C /* FavoritePrimesReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePrimesReducer.swift; sourceTree = "<group>"; };
 		205C8AB028465A7300FBA60C /* FavoritePrimesAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePrimesAction.swift; sourceTree = "<group>"; };
@@ -333,6 +334,7 @@
 		20C142C92846372400E9C574 = {
 			isa = PBXGroup;
 			children = (
+				2000A9C02848996600F47ABD /* PrimeTime.playground */,
 				20C142D42846372500E9C574 /* PrimeTime */,
 				20C143172846566600E9C574 /* Counter */,
 				20C143252846566600E9C574 /* CounterTests */,

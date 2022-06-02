@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import ComposableArchitecture
+import PrimeModal
 
 /// Reducers which describes all the business logic of our app and
 /// broken down into various components.
@@ -19,3 +21,8 @@ public func counterReducer(state: inout Int, action: CounterAction) {
     state += 1
   }
 }
+
+public let counterViewReducer = combine(
+  pullback(counterReducer, value: \CounterViewState.count, action: \CounterViewAction.counter),
+  pullback(primeModalReducer, value: \.self, action: \.primeModal)
+)

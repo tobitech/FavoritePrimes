@@ -15,29 +15,19 @@ import PrimeModal
 /// These are computed properties that bridge the ergonomic gap between `structs` and `enums` by providing dot syntax access to an enum's associate value.
 /// With these properties defined, Swift automatically synthensizes key paths which allows us to pull reducers of location actions back to reducers of global actions.
 enum AppAction {
-  case counter(CounterAction)
-  case primeModal(PrimeModalAction)
+//  case counter(CounterAction)
+//  case primeModal(PrimeModalAction)
+  case counterView(CounterViewAction)
   case favoritePrimes(FavoritePrimesAction)
   
-  var counter: CounterAction? {
+  public var counterView: CounterViewAction? {
     get {
-      guard case let .counter(value) = self else { return nil }
+      guard case let .counterView(value) = self else { return nil }
       return value
     }
     set {
-      guard case .counter = self, let newValue = newValue else { return }
-      self = .counter(newValue)
-    }
-  }
-  
-  var primeModal: PrimeModalAction? {
-    get {
-      guard case let .primeModal(value) = self else { return nil }
-      return value
-    }
-    set {
-      guard case .primeModal = self, let newValue = newValue else { return }
-      self = .primeModal(newValue)
+      guard case .counterView = self, let newValue = newValue else { return }
+      self = .counterView(newValue)
     }
   }
   
