@@ -10,6 +10,7 @@ import Foundation
 public enum FavoritePrimesAction {
   case deleteFavoritePrimes(IndexSet)
   case loadedFavoritePrimes([Int])
+  case loadButtonTapped
   case saveButtonTapped
   
   var deleteFavoritePrimes: IndexSet? {

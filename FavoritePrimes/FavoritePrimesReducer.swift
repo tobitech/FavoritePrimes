@@ -8,21 +8,21 @@
 import Foundation
 import ComposableArchitecture
 
-public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesAction) -> Effect {
+public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesAction) -> [Effect<FavoritePrimesAction>] {
   switch action {
   case let .deleteFavoritePrimes(indexSet):
     for index in indexSet {
       state.remove(at: index)
     }
-    return {}
+    return []
     
   case let .loadedFavoritePrimes(favoritePrimes):
     state = favoritePrimes
-    return {}
+    return []
     
   case .saveButtonTapped:
     let state = state
-    return {
+    return [{
       // In here we will perform the side effect that saves the favourite primes to disk.
       // we want to be able to serialise the primes.
       let data = try! JSONEncoder().encode(state)
@@ -32,6 +32,20 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
       let documentsUrl = URL(fileURLWithPath: documentsPath)
       let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
       try! data.write(to: favoritePrimesUrl)
-    }
+      
+      return nil
+    }]
+
+  case .loadButtonTapped:
+    return [{
+      let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+      let documentsUrl = URL(fileURLWithPath: documentsPath)
+      let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
+      guard let data = try? Data(contentsOf: favoritePrimesUrl),
+            let favoritePrimes = try? JSONDecoder().decode([Int].self, from: data)
+      else { return nil }
+//      self.store.send(.loadedFavoritePrimes(favoritePrimes))
+      return .loadedFavoritePrimes(favoritePrimes)
+    }]
   }
 }

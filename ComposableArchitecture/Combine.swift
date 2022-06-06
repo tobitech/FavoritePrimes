@@ -13,12 +13,17 @@ public func combine<Value, Action>(
   _ reducers: Reducer<Value, Action>...
 ) -> Reducer<Value, Action> {
   return { value, action in
-    let effects = reducers.map { $0(&value, action) }
-    
-    return {
-      for effect in effects {
-        effect()
-      }
-    }
+    let effects = reducers.flatMap { $0(&value, action) }
+    return effects
+//    return {
+//      var finalAction: Action?
+//      for effect in effects {
+//        if let action = effect() {
+//          finalAction = action
+//        }
+//      }
+//
+//      return finalAction
+//    }
   }
 }

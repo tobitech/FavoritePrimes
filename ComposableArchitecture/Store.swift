@@ -8,13 +8,13 @@
 import Combine
 import Foundation
 
-public typealias Effect = () -> Void
+public typealias Effect<Action> = () -> Action?
 
 /// With this signature change to reducers, we've given reducers the ability
 /// to do mutation to the value as it needs based on the action that comes in
 /// but then it can return a closure that can bundle up some side effecting work
 /// that can then be executed later.
-public typealias Reducer<Value, Action> = (inout Value, Action) -> Effect
+public typealias Reducer<Value, Action> = (inout Value, Action) -> [Effect<Action>]
 
 /// This is the core library code that powers our app architecture.
 /// Store is a container for mutable app state and all the logic that can mutate it.
@@ -30,8 +30,12 @@ public final class Store<Value, Action>: ObservableObject {
   }
   
   public func send(_ action: Action) {
-    let effect = self.reducer(&self.value, action)
-    effect()
+    let effects = self.reducer(&self.value, action)
+    effects.forEach { effect in
+      if let action = effect() {
+        self.send(action)
+      }
+    }
   }
   
   public func view<LocalValue, LocalAction>(
@@ -43,7 +47,7 @@ public final class Store<Value, Action>: ObservableObject {
       reducer: { localValue, localAction in
         self.send(toGlobalAction(localAction))
         localValue = toLocalValue(self.value)
-        return {} // the act of creating a view shouldn't introduce any new side effect.
+        return [] // the act of creating a view shouldn't introduce any new side effect.
       }
     )
     
