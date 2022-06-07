@@ -30,7 +30,7 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
 }
 
 private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
-  return {
+  return Effect { _ in
     // In here we will perform the side effect that saves the favourite primes to disk.
     // we want to be able to serialise the primes.
     let data = try! JSONEncoder().encode(favoritePrimes)
@@ -40,20 +40,16 @@ private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
     let documentsUrl = URL(fileURLWithPath: documentsPath)
     let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
     try! data.write(to: favoritePrimesUrl)
-    
-    return nil
   }
 }
 
-private let loadEffect: Effect<FavoritePrimesAction> = {
-  return {
-    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    let documentsUrl = URL(fileURLWithPath: documentsPath)
-    let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
-    guard let data = try? Data(contentsOf: favoritePrimesUrl),
-          let favoritePrimes = try? JSONDecoder().decode([Int].self, from: data)
-    else { return nil }
-    //      self.store.send(.loadedFavoritePrimes(favoritePrimes))
-    return .loadedFavoritePrimes(favoritePrimes)
-  }
-}()
+private let loadEffect = Effect<FavoritePrimesAction> { callback in
+  let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+  let documentsUrl = URL(fileURLWithPath: documentsPath)
+  let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
+  guard let data = try? Data(contentsOf: favoritePrimesUrl),
+        let favoritePrimes = try? JSONDecoder().decode([Int].self, from: data)
+  else { return }
+  //      self.store.send(.loadedFavoritePrimes(favoritePrimes))
+  callback(.loadedFavoritePrimes(favoritePrimes))
+}

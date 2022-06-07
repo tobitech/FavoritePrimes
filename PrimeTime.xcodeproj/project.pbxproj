@@ -57,6 +57,7 @@
 		20C1434B2846568200E9C574 /* PrimeModal.h in Headers */ = {isa = PBXBuildFile; fileRef = 20C1433B2846568200E9C574 /* PrimeModal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		20C1434E2846568200E9C574 /* PrimeModal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20C143392846568200E9C574 /* PrimeModal.framework */; };
 		20C1434F2846568200E9C574 /* PrimeModal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20C143392846568200E9C574 /* PrimeModal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20ECAD5A2850031C00780CE0 /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ECAD592850031C00780CE0 /* Effects.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -212,6 +213,7 @@
 		20C1433C2846568200E9C574 /* PrimeModal.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = PrimeModal.docc; sourceTree = "<group>"; };
 		20C143422846568200E9C574 /* PrimeModalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrimeModalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		20C143492846568200E9C574 /* PrimeModalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimeModalTests.swift; sourceTree = "<group>"; };
+		20ECAD592850031C00780CE0 /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +316,7 @@
 			children = (
 				20C1430328463B3E00E9C574 /* Combine.swift */,
 				208A02E228465DC4006FF83E /* ComposableArchitecture.swift */,
+				20ECAD592850031C00780CE0 /* Effects.swift */,
 				20C142EF284639CC00E9C574 /* Logging.swift */,
 				20C1430728463B6900E9C574 /* Pullback.swift */,
 				20C1430528463B5500E9C574 /* Store.swift */,
@@ -849,6 +852,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				208A02E4284665CA006FF83E /* Store.swift in Sources */,
+				20ECAD5A2850031C00780CE0 /* Effects.swift in Sources */,
 				208A02E72846666F006FF83E /* Logging.swift in Sources */,
 				208A02E5284665D4006FF83E /* Combine.swift in Sources */,
 				208A02E6284665D8006FF83E /* Pullback.swift in Sources */,

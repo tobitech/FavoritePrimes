@@ -5,18 +5,20 @@
 //  Created by Oluwatobi Omotayo on 31/05/2022.
 //
 
-import Foundation
+import ComposableArchitecture
 
 /// Another higher order reducer that is a bit more domain specific.
 /// This is responsible for appending activities to our app's state activities upon receiving certain actions.
 func activityFeed(
-  _ reducer: @escaping (inout AppState, AppAction) -> Void
-) -> (inout AppState, AppAction) -> Void {
+  _ reducer: @escaping Reducer<AppState, AppAction>
+) -> Reducer<AppState, AppAction> {
   
   return { state, action in
     switch action {
     case .counterView(.counter),
-        .favoritePrimes(.loadedFavoritePrimes):
+        .favoritePrimes(.loadedFavoritePrimes),
+        .favoritePrimes(.loadButtonTapped),
+        .favoritePrimes(.saveButtonTapped):
       break
     case .counterView(.primeModal(.removeFavoritePrimeTapped)):
       state.activityFeed.append(.init(timestamp: Date(), type: .removedFavoritePrime(state.count)))
@@ -30,6 +32,6 @@ func activityFeed(
       }
     }
     
-    reducer(&state, action)
+    return reducer(&state, action)
   }
 }
