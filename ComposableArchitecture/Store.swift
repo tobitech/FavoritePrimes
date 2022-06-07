@@ -12,7 +12,19 @@ struct Parallel<A> {
   let run: (@escaping (A) -> Void) -> Void
 }
 
-public typealias Effect<Action> = (@escaping (Action) -> Void) -> Void
+//public typealias Effect<Action> = (@escaping (Action) -> Void) -> Void
+
+public struct Effect<A> {
+  public let run: (@escaping (A) -> Void) -> Void
+  
+  public init(run: @escaping (@escaping (A) -> Void) -> Void) {
+    self.run = run
+  }
+  
+  public func map<B>(_ f: @escaping (A) -> B) -> Effect<B> {
+    return Effect<B> { callback in self.run { a in callback(f(a)) } }
+  }
+}
 
 /// With this signature change to reducers, we've given reducers the ability
 /// to do mutation to the value as it needs based on the action that comes in
@@ -36,7 +48,7 @@ public final class Store<Value, Action>: ObservableObject {
   public func send(_ action: Action) {
     let effects = self.reducer(&self.value, action)
     effects.forEach { effect in
-      effect(self.send)
+      effect.run(self.send)
     }
 //    DispatchQueue.global().async {
 //      effects.forEach { effect in

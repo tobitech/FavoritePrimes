@@ -30,13 +30,20 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
     
   case .nthPrimeButtonTapped:
     state.isNthPrimeButtonDisabled = true
-    let count = state.count
-    return [{ callback in
-      nthPrime(count) { prime in
-        DispatchQueue.main.async {
-          callback(.nthPrimeResponse(prime))
-        }
-      }
+    return [
+      
+      nthPrime(state.count)
+      // Cases on enums are basically functions from their associated value to the enum
+        .map(CounterAction.nthPrimeResponse)
+        .receive(on: .main)
+      
+//      Effect { callback in
+//      nthPrime(count) { prime in
+//        DispatchQueue.main.async {
+//          callback(.nthPrimeResponse(prime))
+//        }
+//      }
+
 //      var p: Int?
 //      // our effects right now work synchronously
 //      // so we need a way to convert this asynchronous code to a synchronous form
@@ -48,7 +55,8 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
 //      }
 //      sema.wait()
 //      return .nthPrimeResponse(p)
-    }]
+//    }
+    ]
     
   case let .nthPrimeResponse(prime):
     state.alertNthPrime = prime.map(PrimeAlert.init(prime:))

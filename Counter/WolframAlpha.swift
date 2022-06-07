@@ -5,7 +5,7 @@
 //  Created by Oluwatobi Omotayo on 01/06/2022.
 //
 
-import Foundation
+import ComposableArchitecture
 
 private let wolframAlphaApiKey = "6H69Q3-828TKQJ4EP"
 
@@ -27,24 +27,24 @@ struct WolframAlphaResult: Decodable {
 }
 
 /// This network function is the sole side effect in our app so far.
-func nthPrime(_ n: Int, callback: @escaping (Int?) -> Void) -> Void {
-  wolframAlpha(query: "prime \(n)") { result in
-    callback(
-      result
-        .flatMap {
-          $0.queryresult
-            .pods
-            .first(where: { $0.primary == .some(true) })?
-            .subpods
-            .first?
-            .plaintext
-        }
-        .flatMap(Int.init)
-    )
+//func nthPrime(_ n: Int, callback: @escaping (Int?) -> Void) -> Void {
+func nthPrime(_ n: Int) -> Effect<Int?> {
+  return wolframAlpha(query: "prime \(n)").map { result in
+    result
+      .flatMap {
+        $0.queryresult
+          .pods
+          .first(where: { $0.primary == .some(true) })?
+          .subpods
+          .first?
+          .plaintext
+      }
+      .flatMap(Int.init)
   }
 }
 
-func wolframAlpha(query: String, callback: @escaping (WolframAlphaResult?) -> Void) -> Void {
+//func wolframAlpha(query: String, callback: @escaping (WolframAlphaResult?) -> Void) -> Void {
+func wolframAlpha(query: String) -> Effect<WolframAlphaResult?> {
   var components = URLComponents(string: "https://api.wolframalpha.com/v2/query")!
   components.queryItems = [
     URLQueryItem(name: "input", value: query),
@@ -53,11 +53,50 @@ func wolframAlpha(query: String, callback: @escaping (WolframAlphaResult?) -> Vo
     URLQueryItem(name: "appid", value: wolframAlphaApiKey),
   ]
   
-  URLSession.shared.dataTask(with: components.url(relativeTo: nil)!) { data, response, error in
-    callback(
-      data
-        .flatMap { try? JSONDecoder().decode(WolframAlphaResult.self, from: $0) }
-    )
+  return dataTask(with: components.url(relativeTo: nil)!)
+    .decode(as: WolframAlphaResult.self)
+//    .map { data, response, error in
+//      data.flatMap {
+//        try? JSONDecoder().decode(WolframAlphaResult.self, from: $0)
+//      }
+//    }
+  
+  //    URLSession.shared.dataTask(with: components.url(relativeTo: nil)!) { data, response, error in
+  //      callback(
+  //        data
+  //          .flatMap { try? JSONDecoder().decode(WolframAlphaResult.self, from: $0) }
+  //      )
+  //    }
+  //    .resume()
+}
+
+extension Effect where A == (Data?, URLResponse?, Error?) {
+  func decode<M: Decodable>(as type: M.Type) -> Effect<M?> {
+    self.map { data, _, _ in
+      data.flatMap {
+        try? JSONDecoder().decode(M.self, from: $0)
+      }
+    }
   }
-  .resume()
+}
+
+extension Effect {
+  func receive(on queue: DispatchQueue) -> Effect {
+    return Effect { callback in
+      self.run { a in
+        queue.async {
+          callback(a)
+        }
+      }
+    }
+  }
+}
+
+func dataTask(with url: URL) -> Effect<(Data?, URLResponse?, Error?)> {
+  return Effect { callback in
+    URLSession.shared.dataTask(with: url) { data, response, error in
+      callback((data, response, error))
+    }
+    .resume()
+  }
 }
