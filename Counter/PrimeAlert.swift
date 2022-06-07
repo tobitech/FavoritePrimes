@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PrimeAlert: Identifiable {
-  let prime: Int
-  var id: Int { self.prime }
+public struct PrimeAlert: Identifiable {
+  public let prime: Int
+  public var id: Int { self.prime }
 }
