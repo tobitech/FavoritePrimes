@@ -13,4 +13,5 @@ public enum CounterAction {
   case incrTapped
   case nthPrimeButtonTapped
   case nthPrimeResponse(Int?)
+  case alertDismissButtonTapped
 }

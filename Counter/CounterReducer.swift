@@ -31,23 +31,32 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
   case .nthPrimeButtonTapped:
     state.isNthPrimeButtonDisabled = true
     let count = state.count
-    return [{
-      var p: Int?
-      // our effects right now work synchronously
-      // so we need a way to convert this asynchronous code to a synchronous form
-      // one way to do that is to use a dispath semaphore
-      let sema = DispatchSemaphore(value: 0)
+    return [{ callback in
       nthPrime(count) { prime in
-        p = prime
-        sema.signal() // only when we get the prime back should the semaphore be signalled.
+        DispatchQueue.main.async {
+          callback(.nthPrimeResponse(prime))
+        }
       }
-      sema.wait()
-      return .nthPrimeResponse(p)
+//      var p: Int?
+//      // our effects right now work synchronously
+//      // so we need a way to convert this asynchronous code to a synchronous form
+//      // one way to do that is to use a dispath semaphore
+//      let sema = DispatchSemaphore(value: 0)
+//      nthPrime(count) { prime in
+//        p = prime
+//        sema.signal() // only when we get the prime back should the semaphore be signalled.
+//      }
+//      sema.wait()
+//      return .nthPrimeResponse(p)
     }]
     
   case let .nthPrimeResponse(prime):
     state.alertNthPrime = prime.map(PrimeAlert.init(prime:))
     state.isNthPrimeButtonDisabled = false
+    return []
+    
+  case .alertDismissButtonTapped:
+    state.alertNthPrime = nil
     return []
   }
 }

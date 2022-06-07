@@ -8,7 +8,11 @@
 import Combine
 import Foundation
 
-public typealias Effect<Action> = () -> Action?
+struct Parallel<A> {
+  let run: (@escaping (A) -> Void) -> Void
+}
+
+public typealias Effect<Action> = (@escaping (Action) -> Void) -> Void
 
 /// With this signature change to reducers, we've given reducers the ability
 /// to do mutation to the value as it needs based on the action that comes in
@@ -32,10 +36,17 @@ public final class Store<Value, Action>: ObservableObject {
   public func send(_ action: Action) {
     let effects = self.reducer(&self.value, action)
     effects.forEach { effect in
-      if let action = effect() {
-        self.send(action)
-      }
+      effect(self.send)
     }
+//    DispatchQueue.global().async {
+//      effects.forEach { effect in
+//        if let action = effect() {
+//          DispatchQueue.main.async {
+//            self.send(action)
+//          }
+//        }
+//      }
+//    }
   }
   
   public func view<LocalValue, LocalAction>(

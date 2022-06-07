@@ -104,7 +104,9 @@ public struct CounterView: View {
     ) { alert in
       Alert(
         title: Text("The \(ordinal(self.store.value.count)) prime is \(alert.prime)"),
-        dismissButton: .default(Text("Ok"))
+        dismissButton: .default(Text("Ok")) {
+          self.store.send(.counter(.alertDismissButtonTapped))
+        }
       )
     }
   }
@@ -125,19 +127,19 @@ func ordinal(_ n: Int) -> String {
   return formatter.string(for: n) ?? ""
 }
 
-struct CounterView_Previews: PreviewProvider {
-
-  static var previews: some View {
-    CounterView(
-      store: Store<CounterViewState, CounterViewAction>(
-        initialValue: CounterViewState(
-          alertNthPrime: nil,
-          count: 0,
-          favoritePrimes: [],
-          isNthPrimeButtonDisabled: false
-        ),
-        reducer: counterViewReducer
-      )
-    )
-  }
-}
+//struct CounterView_Previews: PreviewProvider {
+//
+//  static var previews: some View {
+//    CounterView(
+//      store: Store<CounterViewState, CounterViewAction>(
+//        initialValue: CounterViewState(
+//          alertNthPrime: nil,
+//          count: 0,
+//          favoritePrimes: [],
+//          isNthPrimeButtonDisabled: false
+//        ),
+//        reducer: counterViewReducer
+//      )
+//    )
+//  }
+//}

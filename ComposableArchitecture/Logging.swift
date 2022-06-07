@@ -18,12 +18,11 @@ public func logging<Value, Action>(
     
     // cause printing is an effect
     let newValue = value // we're doing this because compiler doesn't allow inout parameters to be passed down in an escaping closure.
-    return [{
+    return [{ _ in
       print("Action: \(action)")
       print("Value:")
       dump(newValue)
       print("---")
-      return nil
     }] + effects
   }
 }
