@@ -51,15 +51,23 @@ public final class Store<Value, Action>: ObservableObject {
   public func send(_ action: Action) {
     let effects = self.reducer(&self.value, action)
     effects.forEach { effect in
-      var effectCancellable: AnyCancellable!
+      var effectCancellable: AnyCancellable?
+      var didComplete = false
       effectCancellable = effect.sink(
         receiveCompletion: { [weak self] _ in
+          didComplete = true
+          guard let effectCancellable = effectCancellable else {
+            return
+          }
           self?.effectCancellables.remove(effectCancellable)
         },
         receiveValue: self.send
       )
       
-      effectCancellables.insert(effectCancellable)
+      // we only insert the publisher into the set if it doesn't complete immediately.
+      if !didComplete, let effectCancellable = effectCancellable {
+        effectCancellables.insert(effectCancellable)
+      }
     }
   }
   

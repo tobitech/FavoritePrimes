@@ -5,8 +5,9 @@
 //  Created by Oluwatobi Omotayo on 31/05/2022.
 //
 
-import Foundation
+import Combine
 import ComposableArchitecture
+import Foundation
 
 public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesAction) -> [Effect<FavoritePrimesAction>] {
   switch action {
@@ -25,12 +26,16 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
     return [saveEffect(favoritePrimes: state)]
 
   case .loadButtonTapped:
-    return [loadEffect]
+    return [
+      loadEffect
+        .compactMap { $0 }
+        .eraseToEffect()
+    ]
   }
 }
 
 private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
-  return Effect { _ in
+  return .fireAndForget {
     // In here we will perform the side effect that saves the favourite primes to disk.
     // we want to be able to serialise the primes.
     let data = try! JSONEncoder().encode(favoritePrimes)
@@ -43,13 +48,23 @@ private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
   }
 }
 
-private let loadEffect = Effect<FavoritePrimesAction> { callback in
+// Let's create an asynchronous effect helper type, similar to the fireAndForget helper.
+extension Effect {
+  static func sync(work: @escaping () -> Output) -> Effect {
+    return Deferred {
+      Just(work())
+    }.eraseToEffect()
+  }
+}
+
+
+private let loadEffect = Effect<FavoritePrimesAction?>.sync {
   let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
   let documentsUrl = URL(fileURLWithPath: documentsPath)
   let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
   guard let data = try? Data(contentsOf: favoritePrimesUrl),
         let favoritePrimes = try? JSONDecoder().decode([Int].self, from: data)
-  else { return }
-  //      self.store.send(.loadedFavoritePrimes(favoritePrimes))
-  callback(.loadedFavoritePrimes(favoritePrimes))
+  else { return nil }
+  
+  return .loadedFavoritePrimes(favoritePrimes)
 }
