@@ -14,17 +14,17 @@ struct Parallel<A> {
 
 //public typealias Effect<Action> = (@escaping (Action) -> Void) -> Void
 
-public struct Effect<A> {
-  public let run: (@escaping (A) -> Void) -> Void
-  
-  public init(run: @escaping (@escaping (A) -> Void) -> Void) {
-    self.run = run
-  }
-  
-  public func map<B>(_ f: @escaping (A) -> B) -> Effect<B> {
-    return Effect<B> { callback in self.run { a in callback(f(a)) } }
-  }
-}
+//public struct Effect<A> {
+//  public let run: (@escaping (A) -> Void) -> Void
+//
+//  public init(run: @escaping (@escaping (A) -> Void) -> Void) {
+//    self.run = run
+//  }
+//
+//  public func map<B>(_ f: @escaping (A) -> B) -> Effect<B> {
+//    return Effect<B> { callback in self.run { a in callback(f(a)) } }
+//  }
+//}
 
 /// With this signature change to reducers, we've given reducers the ability
 /// to do mutation to the value as it needs based on the action that comes in
@@ -36,9 +36,12 @@ public typealias Reducer<Value, Action> = (inout Value, Action) -> [Effect<Actio
 /// Store is a container for mutable app state and all the logic that can mutate it.
 /// It also reduces our app to SwiftUI by conforming to the `ObservableObject` protocol.
 public final class Store<Value, Action>: ObservableObject {
+  
   private let reducer: Reducer<Value, Action>
   @Published public private(set) var value: Value
-  private var cancellable: Cancellable?
+  private var viewCancellable: Cancellable?
+  
+  private var effectCancellables: Set<AnyCancellable> = []
   
   public init(initialValue: Value, reducer: @escaping Reducer<Value, Action>) {
     self.reducer = reducer
@@ -48,17 +51,16 @@ public final class Store<Value, Action>: ObservableObject {
   public func send(_ action: Action) {
     let effects = self.reducer(&self.value, action)
     effects.forEach { effect in
-      effect.run(self.send)
+      var effectCancellable: AnyCancellable!
+      effectCancellable = effect.sink(
+        receiveCompletion: { [weak self] _ in
+          self?.effectCancellables.remove(effectCancellable)
+        },
+        receiveValue: self.send
+      )
+      
+      effectCancellables.insert(effectCancellable)
     }
-//    DispatchQueue.global().async {
-//      effects.forEach { effect in
-//        if let action = effect() {
-//          DispatchQueue.main.async {
-//            self.send(action)
-//          }
-//        }
-//      }
-//    }
   }
   
   public func view<LocalValue, LocalAction>(
@@ -74,7 +76,7 @@ public final class Store<Value, Action>: ObservableObject {
       }
     )
     
-    localStore.cancellable =  self.$value.sink {[weak localStore] newValue in
+    localStore.viewCancellable =  self.$value.sink {[weak localStore] newValue in
       localStore?.value = toLocalValue(newValue)
     }
 
