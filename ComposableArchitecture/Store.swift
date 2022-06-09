@@ -8,21 +8,57 @@
 import Combine
 import Foundation
 
+struct Parallel<A> {
+  let run: (@escaping (A) -> Void) -> Void
+}
+
+//public typealias Effect<Action> = (@escaping (Action) -> Void) -> Void
+
+public struct Effect<A> {
+  public let run: (@escaping (A) -> Void) -> Void
+  
+  public init(run: @escaping (@escaping (A) -> Void) -> Void) {
+    self.run = run
+  }
+  
+  public func map<B>(_ f: @escaping (A) -> B) -> Effect<B> {
+    return Effect<B> { callback in self.run { a in callback(f(a)) } }
+  }
+}
+
+/// With this signature change to reducers, we've given reducers the ability
+/// to do mutation to the value as it needs based on the action that comes in
+/// but then it can return a closure that can bundle up some side effecting work
+/// that can then be executed later.
+public typealias Reducer<Value, Action> = (inout Value, Action) -> [Effect<Action>]
+
 /// This is the core library code that powers our app architecture.
 /// Store is a container for mutable app state and all the logic that can mutate it.
 /// It also reduces our app to SwiftUI by conforming to the `ObservableObject` protocol.
 public final class Store<Value, Action>: ObservableObject {
-  private let reducer: (inout Value, Action) -> Void
+  private let reducer: Reducer<Value, Action>
   @Published public private(set) var value: Value
   private var cancellable: Cancellable?
   
-  public init(initialValue: Value, reducer: @escaping (inout Value, Action) -> Void) {
+  public init(initialValue: Value, reducer: @escaping Reducer<Value, Action>) {
     self.reducer = reducer
     self.value = initialValue
   }
   
   public func send(_ action: Action) {
-    self.reducer(&self.value, action)
+    let effects = self.reducer(&self.value, action)
+    effects.forEach { effect in
+      effect.run(self.send)
+    }
+//    DispatchQueue.global().async {
+//      effects.forEach { effect in
+//        if let action = effect() {
+//          DispatchQueue.main.async {
+//            self.send(action)
+//          }
+//        }
+//      }
+//    }
   }
   
   public func view<LocalValue, LocalAction>(
@@ -34,6 +70,7 @@ public final class Store<Value, Action>: ObservableObject {
       reducer: { localValue, localAction in
         self.send(toGlobalAction(localAction))
         localValue = toLocalValue(self.value)
+        return [] // the act of creating a view shouldn't introduce any new side effect.
       }
     )
     

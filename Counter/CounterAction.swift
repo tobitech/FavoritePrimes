@@ -11,4 +11,7 @@ import Foundation
 public enum CounterAction {
   case decrTapped
   case incrTapped
+  case nthPrimeButtonTapped
+  case nthPrimeResponse(Int?)
+  case alertDismissButtonTapped
 }

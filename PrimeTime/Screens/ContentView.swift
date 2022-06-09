@@ -40,20 +40,20 @@ struct ContentView: View {
   }
 }
 
-struct ContentView_Previews: PreviewProvider {
-
-  static var previews: some View {
-    ContentView(
-      store: Store(
-        initialValue: AppState(),
-        reducer: with(
-          appReducer,
-          compose(
-            logging,
-            activityFeed
-          )
-        )
-      )
-    )
-  }
-}
+//struct ContentView_Previews: PreviewProvider {
+//
+//  static var previews: some View {
+//    ContentView(
+//      store: Store(
+//        initialValue: AppState(),
+//        reducer: with(
+//          appReducer,
+//          compose(
+//            logging,
+//            activityFeed
+//          )
+//        )
+//      )
+//    )
+//  }
+//}

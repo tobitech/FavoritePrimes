@@ -9,7 +9,34 @@ import ComposableArchitecture
 import SwiftUI
 import PrimeModal
 
-public typealias CounterViewState = (count: Int, favoritePrimes: [Int])
+public struct CounterViewState {
+  public var alertNthPrime: PrimeAlert?
+  public var count: Int
+  public var favoritePrimes: [Int]
+  public var isNthPrimeButtonDisabled: Bool
+  
+  public init(
+    alertNthPrime: PrimeAlert?,
+    count: Int,
+    favoritePrimes: [Int],
+    isNthPrimeButtonDisabled: Bool
+  ) {
+    self.alertNthPrime = alertNthPrime
+    self.count = count
+    self.favoritePrimes = favoritePrimes
+    self.isNthPrimeButtonDisabled = isNthPrimeButtonDisabled
+  }
+  
+  var counter: CounterState {
+    get { (self.alertNthPrime, count, isNthPrimeButtonDisabled) }
+    set { (self.alertNthPrime, count, isNthPrimeButtonDisabled) = newValue }
+  }
+  
+  var primeModal: PrimeModalState {
+    get { (count, favoritePrimes) }
+    set { (count, favoritePrimes) = newValue }
+  }
+}
 
 public enum CounterViewAction {
   case counter(CounterAction)
@@ -41,8 +68,8 @@ public enum CounterViewAction {
 public struct CounterView: View {
   @ObservedObject var store: Store<CounterViewState, CounterViewAction>
   @State var isPrimeModalShown = false
-  @State var alertNthPrime: PrimeAlert?
-  @State var isNthPrimeButtonDisabled = false
+//  @State var alertNthPrime: PrimeAlert?
+//  @State var isNthPrimeButtonDisabled = false
   
   public init(store: Store<CounterViewState, CounterViewAction>) {
     self.store = store
@@ -60,7 +87,7 @@ public struct CounterView: View {
         "What is the \(ordinal(self.store.value.count)) prime?",
         action: self.nthPrimeButtonAction
       )
-      .disabled(self.isNthPrimeButtonDisabled)
+      .disabled(self.store.value.isNthPrimeButtonDisabled)
     }
     .font(.title)
     .navigationBarTitle("Counter demo")
@@ -72,37 +99,25 @@ public struct CounterView: View {
         )
       )
     }
-    .alert(item: self.$alertNthPrime) { alert in
+    .alert(
+      item: .constant(self.store.value.alertNthPrime)
+    ) { alert in
       Alert(
         title: Text("The \(ordinal(self.store.value.count)) prime is \(alert.prime)"),
-        dismissButton: .default(Text("Ok"))
+        dismissButton: .default(Text("Ok")) {
+          self.store.send(.counter(.alertDismissButtonTapped))
+        }
       )
     }
   }
   
   func nthPrimeButtonAction() {
-    self.isNthPrimeButtonDisabled = true
-    nthPrime(self.store.value.count) { prime in
-      self.alertNthPrime = prime.map(PrimeAlert.init(prime:))
-      self.isNthPrimeButtonDisabled = false
-    }
-  }
-}
-
-func nthPrime(_ n: Int, callback: @escaping (Int?) -> Void) -> Void {
-  wolframAlpha(query: "prime \(n)") { result in
-    callback(
-      result
-        .flatMap {
-          $0.queryresult
-            .pods
-            .first(where: { $0.primary == .some(true) })?
-            .subpods
-            .first?
-            .plaintext
-        }
-        .flatMap(Int.init)
-    )
+//    self.isNthPrimeButtonDisabled = true
+//    nthPrime(self.store.value.count) { prime in
+//      self.alertNthPrime = prime.map(PrimeAlert.init(prime:))
+//      self.isNthPrimeButtonDisabled = false
+//    }
+    self.store.send(.counter(.nthPrimeButtonTapped))
   }
 }
 
@@ -116,15 +131,14 @@ func ordinal(_ n: Int) -> String {
 //
 //  static var previews: some View {
 //    CounterView(
-//      store: Store(
-//        initialValue: AppState(),
-//        reducer: with(
-//          appReducer,
-//          compose(
-//            logging,
-//            activityFeed
-//          )
-//        )
+//      store: Store<CounterViewState, CounterViewAction>(
+//        initialValue: CounterViewState(
+//          alertNthPrime: nil,
+//          count: 0,
+//          favoritePrimes: [],
+//          isNthPrimeButtonDisabled: false
+//        ),
+//        reducer: counterViewReducer
 //      )
 //    )
 //  }
