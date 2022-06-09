@@ -35,27 +35,8 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
       nthPrime(state.count)
       // Cases on enums are basically functions from their associated value to the enum
         .map(CounterAction.nthPrimeResponse)
-        .receive(on: .main)
-      
-//      Effect { callback in
-//      nthPrime(count) { prime in
-//        DispatchQueue.main.async {
-//          callback(.nthPrimeResponse(prime))
-//        }
-//      }
-
-//      var p: Int?
-//      // our effects right now work synchronously
-//      // so we need a way to convert this asynchronous code to a synchronous form
-//      // one way to do that is to use a dispath semaphore
-//      let sema = DispatchSemaphore(value: 0)
-//      nthPrime(count) { prime in
-//        p = prime
-//        sema.signal() // only when we get the prime back should the semaphore be signalled.
-//      }
-//      sema.wait()
-//      return .nthPrimeResponse(p)
-//    }
+        .receive(on: DispatchQueue.main)
+        .eraseToEffect()
     ]
     
   case let .nthPrimeResponse(prime):

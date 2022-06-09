@@ -41,6 +41,7 @@ func nthPrime(_ n: Int) -> Effect<Int?> {
       }
       .flatMap(Int.init)
   }
+  .eraseToEffect()
 }
 
 //func wolframAlpha(query: String, callback: @escaping (WolframAlphaResult?) -> Void) -> Void {
@@ -53,19 +54,13 @@ func wolframAlpha(query: String) -> Effect<WolframAlphaResult?> {
     URLQueryItem(name: "appid", value: wolframAlphaApiKey),
   ]
   
-  return dataTask(with: components.url(relativeTo: nil)!)
-    .decode(as: WolframAlphaResult.self)
-//    .map { data, response, error in
-//      data.flatMap {
-//        try? JSONDecoder().decode(WolframAlphaResult.self, from: $0)
-//      }
-//    }
+  return URLSession.shared
+    .dataTaskPublisher(for: components.url(relativeTo: nil)!)
+    .map { data, _ in data }
+    .decode(type: WolframAlphaResult?.self, decoder: JSONDecoder())
+    .replaceError(with: nil)
+    .eraseToEffect()
   
-  //    URLSession.shared.dataTask(with: components.url(relativeTo: nil)!) { data, response, error in
-  //      callback(
-  //        data
-  //          .flatMap { try? JSONDecoder().decode(WolframAlphaResult.self, from: $0) }
-  //      )
-  //    }
-  //    .resume()
+//  return dataTask(with: components.url(relativeTo: nil)!)
+//    .decode(as: WolframAlphaResult.self)
 }
