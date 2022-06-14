@@ -5,6 +5,7 @@
 //  Created by Oluwatobi Omotayo on 31/05/2022.
 //
 
+import Combine
 import Foundation
 
 /// A higher order reducer - which are functions that takes reducer as input
@@ -18,11 +19,20 @@ public func logging<Value, Action>(
     
     // cause printing is an effect
     let newValue = value // we're doing this because compiler doesn't allow inout parameters to be passed down in an escaping closure.
-    return [Effect { _ in
+    return [Effect.fireAndForget {
       print("Action: \(action)")
       print("Value:")
       dump(newValue)
       print("---")
     }] + effects
+  }
+}
+
+extension Effect {
+  public static func fireAndForget(work: @escaping () -> Void) -> Effect {
+    return Deferred { () -> Empty<Output, Never> in
+      work()
+      return Empty(completeImmediately: true)
+    }.eraseToEffect()
   }
 }
