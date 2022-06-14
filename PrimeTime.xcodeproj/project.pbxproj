@@ -705,7 +705,6 @@
 					};
 					208A02AB28465D10006FF83E = {
 						CreatedOnToolsVersion = 13.3;
-						TestTargetID = 20C142D12846372500E9C574;
 					};
 					208A02C428465D74006FF83E = {
 						CreatedOnToolsVersion = 13.3;
@@ -1063,7 +1062,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Debug;
 		};
@@ -1081,7 +1079,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Release;
 		};
