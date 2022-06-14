@@ -9,7 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 import PrimeModal
 
-public struct CounterViewState {
+public struct CounterViewState: Equatable {
   public var alertNthPrime: PrimeAlert?
   public var count: Int
   public var favoritePrimes: [Int]
