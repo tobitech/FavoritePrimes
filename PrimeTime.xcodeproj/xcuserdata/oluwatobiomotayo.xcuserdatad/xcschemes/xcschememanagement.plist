@@ -7,7 +7,7 @@
 		<key>ComposableArchitecture.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>2</integer>
 		</dict>
 		<key>Counter.xcscheme_^#shared#^_</key>
 		<dict>
@@ -38,12 +38,12 @@
 		<key>FavoritePrimes.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<key>PrimeModal.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>3</integer>
+			<integer>1</integer>
 		</dict>
 		<key>PrimeTime (Playground) 1.xcscheme</key>
 		<dict>
@@ -106,7 +106,7 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>5</integer>
 		</dict>
 		<key>PrimeTime.xcscheme_^#shared#^_</key>
 		<dict>
@@ -122,6 +122,11 @@
 			<true/>
 		</dict>
 		<key>20C1431E2846566600E9C574</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>20C143382846568200E9C574</key>
 		<dict>
 			<key>primary</key>
 			<true/>
