@@ -39,6 +39,9 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
         .decode(type: [Int].self, decoder: JSONDecoder())
         .catch { error in Empty(completeImmediately: true) }
         .map(FavoritePrimesAction.loadedFavoritePrimes)
+//        .merge(with: Empty(completeImmediately: false))
+      // Exercise - Strengthen the loadButtonTapped test method to not allow the same event twice. i.e. we are only expecting one loadedFavoritePrimes action but the test passes with the code below which is not supposed to be.
+        .merge(with: Just(FavoritePrimesAction.loadedFavoritePrimes([2, 31])))
         .eraseToEffect()
     ]
   }
@@ -103,6 +106,26 @@ extension FavoritePrimesEnvironment {
 }
 
 var Current = FavoritePrimesEnvironment.live
+
+// let's create a mock version of fileclient so we can use in our tests
+// so that this mock code is only availabe in debug mode. (tests and playground)
+// and won't be accessible when running the code in live environment.
+#if DEBUG
+extension FavoritePrimesEnvironment {
+  static let mock = FavoritePrimesEnvironment(
+    fileClient: FileClient(
+      load: { _ in
+        Effect<Data?>.sync {
+          try! JSONEncoder().encode([2, 31])
+        }
+      },
+      save: { _, _ in
+          .fireAndForget {}
+      }
+    )
+  )
+}
+#endif
 
 
 // MARK: - Lightweight Dependency Injection refresher.
