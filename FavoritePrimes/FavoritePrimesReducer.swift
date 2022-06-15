@@ -23,14 +23,41 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
     
   case .saveButtonTapped:
     //    let state = state - no longer needed since we're passing an immutable value in below
-    return [saveEffect(favoritePrimes: state)]
+    return [
+//      saveEffect(favoritePrimes: state)
+      Current.fileClient.save("favorite-primes.json", try! JSONEncoder().encode(state))
+        .fireAndForget()
+    ]
     
   case .loadButtonTapped:
     return [
-      loadEffect
+//      loadEffect
+//        .compactMap { $0 }
+//        .eraseToEffect()
+      Current.fileClient.load("favorite-primes.json")
         .compactMap { $0 }
+        .decode(type: [Int].self, decoder: JSONDecoder())
+        .catch { error in Empty(completeImmediately: true) }
+        .map(FavoritePrimesAction.loadedFavoritePrimes)
         .eraseToEffect()
     ]
+  }
+}
+
+// (Never) -> A
+
+//func absurd<A>(_ never: Never) -> A {
+//  switch never { }
+//}
+
+// Swift is now smart that we don't even have to included the body
+// this is what we need to convert our Effect of Never to Effect of FavoritePrimesAction.
+func absurd<A>(_ never: Never) -> A {}
+
+// Turn the functionality above to a helper function
+extension Publisher where Output == Never, Failure == Never {
+  func fireAndForget<A>() -> Effect<A> {
+    return self.map(absurd).eraseToEffect()
   }
 }
 
@@ -98,19 +125,19 @@ var Current = FavoritePrimesEnvironment.live
 //let Current = Environment.live
 //#endif
 
-private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
-  return .fireAndForget {
-    // In here we will perform the side effect that saves the favourite primes to disk.
-    // we want to be able to serialise the primes.
-    let data = try! JSONEncoder().encode(favoritePrimes)
-    
-    // we want to save this data to a consistent url in the document directory.
-    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    let documentsUrl = URL(fileURLWithPath: documentsPath)
-    let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
-    try! data.write(to: favoritePrimesUrl)
-  }
-}
+//private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
+//  return .fireAndForget {
+//    // In here we will perform the side effect that saves the favourite primes to disk.
+//    // we want to be able to serialise the primes.
+//    let data = try! JSONEncoder().encode(favoritePrimes)
+//
+//    // we want to save this data to a consistent url in the document directory.
+//    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//    let documentsUrl = URL(fileURLWithPath: documentsPath)
+//    let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
+//    try! data.write(to: favoritePrimesUrl)
+//  }
+//}
 
 // Let's create an asynchronous effect helper type, similar to the fireAndForget helper.
 extension Effect {
@@ -122,13 +149,13 @@ extension Effect {
 }
 
 
-private let loadEffect = Effect<FavoritePrimesAction?>.sync {
-  let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-  let documentsUrl = URL(fileURLWithPath: documentsPath)
-  let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
-  guard let data = try? Data(contentsOf: favoritePrimesUrl),
-        let favoritePrimes = try? JSONDecoder().decode([Int].self, from: data)
-  else { return nil }
-  
-  return .loadedFavoritePrimes(favoritePrimes)
-}
+//private let loadEffect = Effect<FavoritePrimesAction?>.sync {
+//  let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+//  let documentsUrl = URL(fileURLWithPath: documentsPath)
+//  let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
+//  guard let data = try? Data(contentsOf: favoritePrimesUrl),
+//        let favoritePrimes = try? JSONDecoder().decode([Int].self, from: data)
+//  else { return nil }
+//
+//  return .loadedFavoritePrimes(favoritePrimes)
+//}
