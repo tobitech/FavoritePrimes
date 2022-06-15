@@ -22,9 +22,9 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
     return []
     
   case .saveButtonTapped:
-//    let state = state - no longer needed since we're passing an immutable value in below
+    //    let state = state - no longer needed since we're passing an immutable value in below
     return [saveEffect(favoritePrimes: state)]
-
+    
   case .loadButtonTapped:
     return [
       loadEffect
@@ -33,6 +33,70 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
     ]
   }
 }
+
+
+struct FileClient {
+  // optional because the file may not exist on disk
+  // we're a not using Effect<FavoritePrimesAction> so that the FileClient is not tightly coupled with the favorite primes module and in the future we can extract it into its own module.
+  var load: (String) -> Effect<Data?>
+  // the method produces a fire and forget effect.
+  // we're using Never (defined in Swift standard library because it represents a type that can never be constructed.
+  var save: (String, Data) -> Effect<Never>
+}
+
+// let's make a live version of the FileClient
+extension FileClient {
+  static let live = FileClient(
+    load: { fileName in
+        .sync {
+          let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+          let documentsUrl = URL(fileURLWithPath: documentsPath)
+          let favoritePrimesUrl = documentsUrl.appendingPathComponent(fileName)
+          return try? Data(contentsOf: favoritePrimesUrl)
+        }
+    },
+    save: { fileName, data in
+      return .fireAndForget {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let documentsUrl = URL(fileURLWithPath: documentsPath)
+        let favoritePrimesUrl = documentsUrl.appendingPathComponent(fileName)
+        try! data.write(to: favoritePrimesUrl)
+      }
+    }
+  )
+}
+
+
+struct FavoritePrimesEnvironment {
+  var fileClient: FileClient
+}
+
+extension FavoritePrimesEnvironment {
+  static let live = FavoritePrimesEnvironment(fileClient: .live)
+}
+
+var Current = FavoritePrimesEnvironment.live
+
+
+// MARK: - Lightweight Dependency Injection refresher.
+//struct Environment {
+//  var date: () -> Date
+//}
+//
+//extension Environment {
+//  static let live = Environment { Date() }
+//}
+//
+//extension Environment {
+//  static let mock = Environment { Date(timeIntervalSince1970: 1234567890) }
+//}
+//
+//// global variable that represents the live implementation
+//#if DEBUG
+//var Current = Environment.live
+//#else
+//let Current = Environment.live
+//#endif
 
 private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
   return .fireAndForget {
