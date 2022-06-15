@@ -164,7 +164,7 @@ extension FavoritePrimesEnvironment {
 
 // Let's create an asynchronous effect helper type, similar to the fireAndForget helper.
 extension Effect {
-  static func sync(work: @escaping () -> Output) -> Effect {
+  public static func sync(work: @escaping () -> Output) -> Effect {
     return Deferred {
       Just(work())
     }.eraseToEffect()
