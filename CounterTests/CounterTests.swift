@@ -7,6 +7,40 @@
 
 import XCTest
 @testable import Counter
+import ComposableArchitecture
+
+struct Step<Value, Action> {
+  let action: Action
+  let update: (inout Value) -> Void
+  let file: StaticString
+  let line: UInt
+  
+  init(
+    _ action: Action,
+    file: StaticString = #file,
+    line: UInt = #line,
+    _ update: @escaping (inout Value) -> Void
+  ) {
+    self.action = action
+    self.update = update
+    self.file = file
+    self.line = line
+  }
+}
+
+func assert<Value: Equatable, Action>(
+  initialValue: Value,
+  reducer: Reducer<Value, Action>,
+  steps: Step<Value, Action>...
+) {
+  var state = initialValue
+  steps.forEach { step in
+    var expected = state
+    _ = reducer(&state, step.action)
+    step.update(&expected)
+    XCTAssertEqual(state, expected, file: step.file, line: step.line)
+  }
+}
 
 class CounterTests: XCTestCase {
   
@@ -16,54 +50,24 @@ class CounterTests: XCTestCase {
   }
   
   func testIncrButtonTapped() {
-    var state = CounterViewState(count: 2)
-//    var state = CounterViewState(
-//      alertNthPrime: nil,
-//      count: 2,
-//      favoritePrimes: [3, 5],
-//      isNthPrimeButtonDisabled: false
-//    )
-    var expected = state
-    let effects = counterViewReducer(&state, .counter(.incrTapped))
-    expected.count = 3
-    XCTAssertEqual(state, expected)
     
-//    XCTAssertEqual(
-//      state,
-//      CounterViewState(
-//        alertNthPrime: nil,
-//        count: 3,
-//        favoritePrimes: [3, 5],
-//        isNthPrimeButtonDisabled: false
-//      )
-//    )
-    
-    XCTAssert(effects.isEmpty)
+    assert(
+      initialValue: CounterViewState(count: 2),
+      reducer: counterViewReducer,
+      steps:
+      Step(.counter(.incrTapped)) { $0.count = 3 },
+      Step(.counter(.incrTapped)) { $0.count = 4 },
+      Step(.counter(.decrTapped)) { $0.count = 3 }
+    )
   }
   
   func testDecrButtonTapped() {
     var state = CounterViewState(count: 2)
-//    var state = CounterViewState(
-//      alertNthPrime: nil,
-//      count: 2,
-//      favoritePrimes: [3, 5],
-//      isNthPrimeButtonDisabled: false
-//    )
     var expected = state
     let effects = counterViewReducer(&state, .counter(.decrTapped))
     expected.count = 1
     
     XCTAssertEqual(state, expected)
-    
-//    XCTAssertEqual(
-//      state,
-//      CounterViewState(
-//        alertNthPrime: nil,
-//        count: 1,
-//        favoritePrimes: [3, 5],
-//        isNthPrimeButtonDisabled: false
-//      )
-//    )
     
     XCTAssert(effects.isEmpty)
   }
@@ -75,12 +79,6 @@ class CounterTests: XCTestCase {
       alertNthPrime: nil,
       isNthPrimeButtonDisabled: false
     )
-//    var state = CounterViewState(
-//      alertNthPrime: nil,
-//      count: 2,
-//      favoritePrimes: [3, 5],
-//      isNthPrimeButtonDisabled: false
-//    )
     
     var expected = state
     
@@ -88,16 +86,6 @@ class CounterTests: XCTestCase {
     
     expected.isNthPrimeButtonDisabled = true
     XCTAssertEqual(state, expected)
-    
-//    XCTAssertEqual(
-//      state,
-//      CounterViewState(
-//        alertNthPrime: nil,
-//        count: 2,
-//        favoritePrimes: [3, 5],
-//        isNthPrimeButtonDisabled: true
-//      )
-//    )
     
     XCTAssertEqual(effects.count, 1)
     
