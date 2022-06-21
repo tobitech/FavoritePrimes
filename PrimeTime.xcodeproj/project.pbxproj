@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20080F272861AA580008F738 /* PrimeTimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20080F262861AA580008F738 /* PrimeTimeTests.swift */; };
 		205C8AAD28465A3900FBA60C /* PrimeTimeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205C8AAC28465A3900FBA60C /* PrimeTimeApp.swift */; };
 		208A02A728465D10006FF83E /* FavoritePrimes.docc in Sources */ = {isa = PBXBuildFile; fileRef = 208A02A628465D10006FF83E /* FavoritePrimes.docc */; };
 		208A02AD28465D10006FF83E /* FavoritePrimes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 208A02A328465D10006FF83E /* FavoritePrimes.framework */; };
@@ -62,6 +63,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		20080F282861AA580008F738 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 20C142CA2846372400E9C574 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 20C142D12846372500E9C574;
+			remoteInfo = PrimeTime;
+		};
 		208A02AE28465D10006FF83E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 20C142CA2846372400E9C574 /* Project object */;
@@ -167,6 +175,8 @@
 
 /* Begin PBXFileReference section */
 		2000A9C02848996600F47ABD /* PrimeTime.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PrimeTime.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		20080F242861AA580008F738 /* PrimeTimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrimeTimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		20080F262861AA580008F738 /* PrimeTimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimeTimeTests.swift; sourceTree = "<group>"; };
 		205C8AAC28465A3900FBA60C /* PrimeTimeApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrimeTimeApp.swift; sourceTree = "<group>"; };
 		205C8AAE28465A5F00FBA60C /* FavoritePrimesReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePrimesReducer.swift; sourceTree = "<group>"; };
 		205C8AB028465A7300FBA60C /* FavoritePrimesAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePrimesAction.swift; sourceTree = "<group>"; };
@@ -219,6 +229,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		20080F212861AA580008F738 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		208A02A028465D10006FF83E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -293,6 +310,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		20080F252861AA580008F738 /* PrimeTimeTests */ = {
+			isa = PBXGroup;
+			children = (
+				20080F262861AA580008F738 /* PrimeTimeTests.swift */,
+			);
+			path = PrimeTimeTests;
+			sourceTree = "<group>";
+		};
 		208A02A428465D10006FF83E /* FavoritePrimes */ = {
 			isa = PBXGroup;
 			children = (
@@ -341,6 +366,7 @@
 			children = (
 				2000A9C02848996600F47ABD /* PrimeTime.playground */,
 				20C142D42846372500E9C574 /* PrimeTime */,
+				20080F252861AA580008F738 /* PrimeTimeTests */,
 				20C143172846566600E9C574 /* Counter */,
 				20C143252846566600E9C574 /* CounterTests */,
 				20C1433A2846568200E9C574 /* PrimeModal */,
@@ -365,6 +391,7 @@
 				208A02AC28465D10006FF83E /* FavoritePrimesTests.xctest */,
 				208A02C528465D74006FF83E /* ComposableArchitecture.framework */,
 				208A02CE28465D74006FF83E /* ComposableArchitectureTests.xctest */,
+				20080F242861AA580008F738 /* PrimeTimeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -523,6 +550,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		20080F232861AA580008F738 /* PrimeTimeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20080F2C2861AA580008F738 /* Build configuration list for PBXNativeTarget "PrimeTimeTests" */;
+			buildPhases = (
+				20080F202861AA580008F738 /* Sources */,
+				20080F212861AA580008F738 /* Frameworks */,
+				20080F222861AA580008F738 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				20080F292861AA580008F738 /* PBXTargetDependency */,
+			);
+			name = PrimeTimeTests;
+			productName = PrimeTimeTests;
+			productReference = 20080F242861AA580008F738 /* PrimeTimeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		208A02A228465D10006FF83E /* FavoritePrimes */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 208A02BE28465D10006FF83E /* Build configuration list for PBXNativeTarget "FavoritePrimes" */;
@@ -700,9 +745,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1330;
+				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1330;
 				TargetAttributes = {
+					20080F232861AA580008F738 = {
+						CreatedOnToolsVersion = 13.4;
+						TestTargetID = 20C142D12846372500E9C574;
+					};
 					208A02A228465D10006FF83E = {
 						CreatedOnToolsVersion = 13.3;
 					};
@@ -747,6 +796,7 @@
 			projectRoot = "";
 			targets = (
 				20C142D12846372500E9C574 /* PrimeTime */,
+				20080F232861AA580008F738 /* PrimeTimeTests */,
 				20C143152846566600E9C574 /* Counter */,
 				20C1431E2846566600E9C574 /* CounterTests */,
 				20C143382846568200E9C574 /* PrimeModal */,
@@ -760,6 +810,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		20080F222861AA580008F738 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		208A02A128465D10006FF83E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -828,6 +885,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		20080F202861AA580008F738 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20080F272861AA580008F738 /* PrimeTimeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		208A029F28465D10006FF83E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -928,6 +993,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		20080F292861AA580008F738 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 20C142D12846372500E9C574 /* PrimeTime */;
+			targetProxy = 20080F282861AA580008F738 /* PBXContainerItemProxy */;
+		};
 		208A02AF28465D10006FF83E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 208A02A228465D10006FF83E /* FavoritePrimes */;
@@ -991,6 +1061,44 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		20080F2A2861AA580008F738 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59SNV64744;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oluwatobiomotayo.PrimeTimeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
+			};
+			name = Debug;
+		};
+		20080F2B2861AA580008F738 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 59SNV64744;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oluwatobiomotayo.PrimeTimeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
+			};
+			name = Release;
+		};
 		208A02BA28465D10006FF83E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1546,6 +1654,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		20080F2C2861AA580008F738 /* Build configuration list for PBXNativeTarget "PrimeTimeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				20080F2A2861AA580008F738 /* Debug */,
+				20080F2B2861AA580008F738 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		208A02BE28465D10006FF83E /* Build configuration list for PBXNativeTarget "FavoritePrimes" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
