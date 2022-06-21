@@ -5,8 +5,10 @@
 //  Created by Oluwatobi Omotayo on 31/05/2022.
 //
 
-import Foundation
+import Combine
 import ComposableArchitecture
+import FavoritePrimes
+import Foundation
 import PrimeModal
 
 public typealias CounterState = (
@@ -27,12 +29,12 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
   case .incrTapped:
     state.count += 1
     return []
-    
+
   case .nthPrimeButtonTapped:
     state.isNthPrimeButtonDisabled = true
     return [
-      
-      nthPrime(state.count)
+      //  nthPrime(state.count)
+      Current.nthPrime(state.count)
       // Cases on enums are basically functions from their associated value to the enum
         .map(CounterAction.nthPrimeResponse)
         .receive(on: DispatchQueue.main)
@@ -48,6 +50,20 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
     state.alertNthPrime = nil
     return []
   }
+}
+
+struct CounterEnvironment {
+  var nthPrime: (Int) -> Effect<Int?>
+}
+
+extension CounterEnvironment {
+  static let live = CounterEnvironment(nthPrime: Counter.nthPrime)
+}
+
+var Current = CounterEnvironment.live
+
+extension CounterEnvironment {
+  static let mock = CounterEnvironment { _ in .sync { 17 } }
 }
 
 public let counterViewReducer = combine(

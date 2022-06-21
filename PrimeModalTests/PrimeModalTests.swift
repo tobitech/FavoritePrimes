@@ -9,28 +9,34 @@ import XCTest
 @testable import PrimeModal
 
 class PrimeModalTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
+  func testSaveFavoritePrimesTapped() throws {
+    var state = (count: 2, favoritePrimes: [3, 5])
+    
+    let effects = primeModalReducer(state: &state, action: .saveFavoritePrimeTapped)
+    
+    // since we're using a tuple, it's expedient we destructure the model
+    // in case we add new fields so that we can get a compiler error
+    // another option would be to write an XCTAssert helper to work on tuples
+    // or go with the struct route option.
+    let (count, favoritePrimes) = state
+    
+    XCTAssertEqual(count, 2)
+    XCTAssertEqual(favoritePrimes, [3, 5, 2])
+    
+    // if we don't test effects that is returned by the reducer, our test story won't be complete.
+    // since we know the prime modal screen doesn't generate any effects we assert that it is empty.
+    XCTAssert(effects.isEmpty)
+  }
+  
+  func testRemoveFavoritePrimesTapped() throws {
+    var state = (count: 3, favoritePrimes: [3, 5])
+    
+    let effects = primeModalReducer(state: &state, action: .removeFavoritePrimeTapped)
+    let (count, favoritePrimes) = state
+    
+    XCTAssertEqual(count, 3)
+    XCTAssertEqual(favoritePrimes, [5])
+    
+    XCTAssert(effects.isEmpty)
+  }
 }

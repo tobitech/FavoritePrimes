@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum PrimeModalAction {
+public enum PrimeModalAction: Equatable {
   case saveFavoritePrimeTapped
   case removeFavoritePrimeTapped
 }

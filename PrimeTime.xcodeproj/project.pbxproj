@@ -57,6 +57,7 @@
 		20C1434B2846568200E9C574 /* PrimeModal.h in Headers */ = {isa = PBXBuildFile; fileRef = 20C1433B2846568200E9C574 /* PrimeModal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		20C1434E2846568200E9C574 /* PrimeModal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20C143392846568200E9C574 /* PrimeModal.framework */; };
 		20C1434F2846568200E9C574 /* PrimeModal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20C143392846568200E9C574 /* PrimeModal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		20E02D37285CDDA800021AE6 /* ComposableArchitectureTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E02D36285CDDA800021AE6 /* ComposableArchitectureTestSupport.swift */; };
 		20ECAD5A2850031C00780CE0 /* Effects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20ECAD592850031C00780CE0 /* Effects.swift */; };
 /* End PBXBuildFile section */
 
@@ -213,6 +214,7 @@
 		20C1433C2846568200E9C574 /* PrimeModal.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = PrimeModal.docc; sourceTree = "<group>"; };
 		20C143422846568200E9C574 /* PrimeModalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrimeModalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		20C143492846568200E9C574 /* PrimeModalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimeModalTests.swift; sourceTree = "<group>"; };
+		20E02D36285CDDA800021AE6 /* ComposableArchitectureTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposableArchitectureTestSupport.swift; sourceTree = "<group>"; };
 		20ECAD592850031C00780CE0 /* Effects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effects.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -458,6 +460,7 @@
 			isa = PBXGroup;
 			children = (
 				20C143262846566600E9C574 /* CounterTests.swift */,
+				20E02D36285CDDA800021AE6 /* ComposableArchitectureTestSupport.swift */,
 			);
 			path = CounterTests;
 			sourceTree = "<group>";
@@ -705,7 +708,6 @@
 					};
 					208A02AB28465D10006FF83E = {
 						CreatedOnToolsVersion = 13.3;
-						TestTargetID = 20C142D12846372500E9C574;
 					};
 					208A02C428465D74006FF83E = {
 						CreatedOnToolsVersion = 13.3;
@@ -722,14 +724,12 @@
 					};
 					20C1431E2846566600E9C574 = {
 						CreatedOnToolsVersion = 13.3;
-						TestTargetID = 20C142D12846372500E9C574;
 					};
 					20C143382846568200E9C574 = {
 						CreatedOnToolsVersion = 13.3;
 					};
 					20C143412846568200E9C574 = {
 						CreatedOnToolsVersion = 13.3;
-						TestTargetID = 20C142D12846372500E9C574;
 					};
 				};
 			};
@@ -902,6 +902,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				20C143272846566600E9C574 /* CounterTests.swift in Sources */,
+				20E02D37285CDDA800021AE6 /* ComposableArchitectureTestSupport.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1064,7 +1065,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Debug;
 		};
@@ -1082,7 +1082,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Release;
 		};
@@ -1430,7 +1429,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Debug;
 		};
@@ -1448,7 +1446,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Release;
 		};
@@ -1526,7 +1523,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Debug;
 		};
@@ -1544,7 +1540,6 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrimeTime.app/PrimeTime";
 			};
 			name = Release;
 		};
