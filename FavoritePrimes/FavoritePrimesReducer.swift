@@ -29,13 +29,13 @@ public func favoritePrimesReducer(
     //    let state = state - no longer needed since we're passing an immutable value in below
     return [
 //      saveEffect(favoritePrimes: state)
-      environment.fileClient.save("favorite-primes.json", try! JSONEncoder().encode(state))
+      environment.save("favorite-primes.json", try! JSONEncoder().encode(state))
         .fireAndForget()
     ]
     
   case .loadButtonTapped:
     return [
-      environment.fileClient.load("favorite-primes.json")
+      environment.load("favorite-primes.json")
         .compactMap { $0 }
         .decode(type: [Int].self, decoder: JSONDecoder())
         .catch { error in Empty(completeImmediately: true) }
@@ -66,7 +66,7 @@ extension Publisher where Output == Never, Failure == Never {
 }
 
 
-struct FileClient {
+public struct FileClient {
   // optional because the file may not exist on disk
   // we're a not using Effect<FavoritePrimesAction> so that the FileClient is not tightly coupled with the favorite primes module and in the future we can extract it into its own module.
   var load: (String) -> Effect<Data?>
@@ -77,7 +77,7 @@ struct FileClient {
 
 // let's make a live version of the FileClient
 extension FileClient {
-  static let live = FileClient(
+  public static let live = FileClient(
     load: { fileName in
         .sync {
           let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -98,13 +98,16 @@ extension FileClient {
 }
 
 
-public struct FavoritePrimesEnvironment {
-  var fileClient: FileClient
-}
+//public struct FavoritePrimesEnvironment {
+//  var fileClient: FileClient
+//}
 
-extension FavoritePrimesEnvironment {
-  public static let live = FavoritePrimesEnvironment(fileClient: .live)
-}
+// we can upgrade this to a tuple in the future when we have more dependencies.
+public typealias FavoritePrimesEnvironment = FileClient
+
+//extension FavoritePrimesEnvironment {
+//  public static let live = FavoritePrimesEnvironment(fileClient: .live)
+//}
 
 //var Current = FavoritePrimesEnvironment.live
 
@@ -112,18 +115,16 @@ extension FavoritePrimesEnvironment {
 // so that this mock code is only availabe in debug mode. (tests and playground)
 // and won't be accessible when running the code in live environment.
 #if DEBUG
-extension FavoritePrimesEnvironment {
-  static let mock = FavoritePrimesEnvironment(
-    fileClient: FileClient(
-      load: { _ in
-        Effect<Data?>.sync {
-          try! JSONEncoder().encode([2, 31])
-        }
-      },
-      save: { _, _ in
-          .fireAndForget {}
+extension FileClient {
+  static let mock = FileClient(
+    load: { _ in
+      Effect<Data?>.sync {
+        try! JSONEncoder().encode([2, 31])
       }
-    )
+    },
+    save: { _, _ in
+        .fireAndForget {}
+    }
   )
 }
 #endif

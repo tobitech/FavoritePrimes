@@ -38,7 +38,7 @@ public func counterReducer(
     state.isNthPrimeButtonDisabled = true
     return [
       //  nthPrime(state.count)
-      environment.nthPrime(state.count)
+      environment(state.count)
       // Cases on enums are basically functions from their associated value to the enum
         .map(CounterAction.nthPrimeResponse)
         .receive(on: DispatchQueue.main)
@@ -56,19 +56,23 @@ public func counterReducer(
   }
 }
 
-public struct CounterEnvironment {
-  var nthPrime: (Int) -> Effect<Int?>
-}
+//public struct CounterEnvironment {
+//  var nthPrime: (Int) -> Effect<Int?>
+//}
 
-extension CounterEnvironment {
-  public static let live = CounterEnvironment(nthPrime: Counter.nthPrime)
-}
+public typealias CounterEnvironment = (Int) -> Effect<Int?>
+
+//extension CounterEnvironment {
+//  public static let live = CounterEnvironment(nthPrime: Counter.nthPrime)
+//}
 
 //var Current = CounterEnvironment.live
 
-extension CounterEnvironment {
-  static let mock = CounterEnvironment { _ in .sync { 17 } }
-}
+// No more extension - we will just use mock version of the function in practice.
+//extension CounterEnvironment {
+//  static let mock = CounterEnvironment { _ in .sync { 17 } }
+//}
+
 
 public let counterViewReducer: Reducer<CounterViewState, CounterViewAction, CounterEnvironment> = combine(
   pullback(
