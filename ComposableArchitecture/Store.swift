@@ -12,44 +12,40 @@ struct Parallel<A> {
   let run: (@escaping (A) -> Void) -> Void
 }
 
-//public typealias Effect<Action> = (@escaping (Action) -> Void) -> Void
-
-//public struct Effect<A> {
-//  public let run: (@escaping (A) -> Void) -> Void
-//
-//  public init(run: @escaping (@escaping (A) -> Void) -> Void) {
-//    self.run = run
-//  }
-//
-//  public func map<B>(_ f: @escaping (A) -> B) -> Effect<B> {
-//    return Effect<B> { callback in self.run { a in callback(f(a)) } }
-//  }
-//}
-
 /// With this signature change to reducers, we've given reducers the ability
 /// to do mutation to the value as it needs based on the action that comes in
 /// but then it can return a closure that can bundle up some side effecting work
 /// that can then be executed later.
-public typealias Reducer<Value, Action> = (inout Value, Action) -> [Effect<Action>]
+public typealias Reducer<Value, Action, Environment> = (inout Value, Action, Environment) -> [Effect<Action>]
 
 /// This is the core library code that powers our app architecture.
 /// Store is a container for mutable app state and all the logic that can mutate it.
 /// It also reduces our app to SwiftUI by conforming to the `ObservableObject` protocol.
 public final class Store<Value, Action>: ObservableObject {
   
-  private let reducer: Reducer<Value, Action>
+  private let reducer: Reducer<Value, Action, Any>
+  private let environment: Any
   @Published public private(set) var value: Value
   private var viewCancellable: Cancellable?
   
   private var effectCancellables: Set<AnyCancellable> = []
   
-  public init(initialValue: Value, reducer: @escaping Reducer<Value, Action>) {
-    self.reducer = reducer
+  public init<Environment>(
+    initialValue: Value,
+    reducer: @escaping Reducer<Value, Action, Environment>,
+    environment: Environment
+  ) {
+    self.reducer = { value, action, environment in
+      // force casting here seems safe, because we know we're given a honest reducer with an honest environment.
+      // check the exercises to see how we can do type erasure without force casting.
+      reducer(&value, action, environment as! Environment)
+    }
     self.value = initialValue
+    self.environment = environment
   }
   
   public func send(_ action: Action) {
-    let effects = self.reducer(&self.value, action)
+    let effects = self.reducer(&self.value, action, environment)
     effects.forEach { effect in
       var effectCancellable: AnyCancellable?
       var didComplete = false
@@ -77,11 +73,12 @@ public final class Store<Value, Action>: ObservableObject {
   ) -> Store<LocalValue, LocalAction> {
     let localStore = Store<LocalValue, LocalAction>(
       initialValue: toLocalValue(self.value),
-      reducer: { localValue, localAction in
+      reducer: { localValue, localAction, _ in
         self.send(toGlobalAction(localAction))
         localValue = toLocalValue(self.value)
         return [] // the act of creating a view shouldn't introduce any new side effect.
-      }
+      },
+      environment: self.environment
     )
     
     localStore.viewCancellable =  self.$value.sink {[weak localStore] newValue in
@@ -90,16 +87,4 @@ public final class Store<Value, Action>: ObservableObject {
 
     return localStore
   }
-  
-//  func ___<LocalAction>(
-//    _ f: @escaping (LocalAction) -> Action
-//  ) -> Store<Value, LocalAction> {
-//    return Store<Value, LocalAction>(
-//      initialValue: self.value,
-//      reducer: { value, localAction in
-//        self.send(f(localAction))
-//        value = self.value
-//      }
-//    )
-//  }
 }

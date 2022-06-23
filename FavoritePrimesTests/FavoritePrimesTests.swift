@@ -10,17 +10,18 @@ import XCTest
 
 class FavoritePrimesTests: XCTestCase {
   
-  override func setUp() {
-    super.setUp()
-    Current = .mock
-  }
+//  override func setUp() {
+//    super.setUp()
+//    Current = .mock
+//  }
   
   func testDeleteFavoritePrimes() throws {
     var state = [2, 3, 5, 7]
     
     let effects = favoritePrimesReducer(
       state: &state,
-      action: .deleteFavoritePrimes([2])
+      action: .deleteFavoritePrimes([2]),
+      environment: FileClient.mock
     )
     
     XCTAssertEqual(state, [2, 3, 7])
@@ -35,7 +36,13 @@ class FavoritePrimesTests: XCTestCase {
     // We can just trust that our live implementation will work as long as we pass it the right parameters but we want to verify that the save effect was actually called.
     // We will use a boolean that we will toggle when the save effect is called.
     var didSave = false
-    Current.fileClient.save = { _, _ in
+    var environment = FileClient.mock
+//    Current.fileClient.save = { _, _ in
+//        .fireAndForget {
+//          didSave = true
+//        }
+//    }
+    environment.save = { _, _ in
         .fireAndForget {
           didSave = true
         }
@@ -45,7 +52,8 @@ class FavoritePrimesTests: XCTestCase {
     
     let effects = favoritePrimesReducer(
       state: &state,
-      action: .saveButtonTapped
+      action: .saveButtonTapped,
+      environment: environment
     )
     
     XCTAssertEqual(state, [2, 3, 5, 7])
@@ -63,17 +71,25 @@ class FavoritePrimesTests: XCTestCase {
   }
   
   func testLoadLoadFavoritePrimesFlow() throws {
-    Current.fileClient.load = { _ in
+//    Current.fileClient.load = { _ in
+//      return .sync {
+//        try! JSONEncoder().encode([2, 31])
+//      }
+//    }
+    var environment = FileClient.mock
+    environment.load = { _ in
       return .sync {
         try! JSONEncoder().encode([2, 31])
       }
     }
     
+    
     var state = [2, 3, 5, 7]
     
     var effects = favoritePrimesReducer(
       state: &state,
-      action: .loadButtonTapped
+      action: .loadButtonTapped,
+      environment: environment
     )
     
     XCTAssertEqual(state, [2, 3, 5, 7])
@@ -97,7 +113,7 @@ class FavoritePrimesTests: XCTestCase {
     
     // we know that the effect produces another effect.
     // we are now passing it the actual actual that we retrieved from subscribing to the effect rather than manually constructing the effec that we think will be fedback to the store.
-    effects = (favoritePrimesReducer(state: &state, action: nextAction))
+    effects = (favoritePrimesReducer(state: &state, action: nextAction, environment: environment))
     
     XCTAssertEqual(state, [2, 31])
     XCTAssert(effects.isEmpty)

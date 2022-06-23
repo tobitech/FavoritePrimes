@@ -9,7 +9,11 @@ import Combine
 import ComposableArchitecture
 import Foundation
 
-public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesAction) -> [Effect<FavoritePrimesAction>] {
+public func favoritePrimesReducer(
+  state: inout [Int],
+  action: FavoritePrimesAction,
+  environment: FavoritePrimesEnvironment
+) -> [Effect<FavoritePrimesAction>] {
   switch action {
   case let .deleteFavoritePrimes(indexSet):
     for index in indexSet {
@@ -25,16 +29,13 @@ public func favoritePrimesReducer(state: inout [Int], action: FavoritePrimesActi
     //    let state = state - no longer needed since we're passing an immutable value in below
     return [
 //      saveEffect(favoritePrimes: state)
-      Current.fileClient.save("favorite-primes.json", try! JSONEncoder().encode(state))
+      environment.save("favorite-primes.json", try! JSONEncoder().encode(state))
         .fireAndForget()
     ]
     
   case .loadButtonTapped:
     return [
-//      loadEffect
-//        .compactMap { $0 }
-//        .eraseToEffect()
-      Current.fileClient.load("favorite-primes.json")
+      environment.load("favorite-primes.json")
         .compactMap { $0 }
         .decode(type: [Int].self, decoder: JSONDecoder())
         .catch { error in Empty(completeImmediately: true) }
@@ -65,7 +66,7 @@ extension Publisher where Output == Never, Failure == Never {
 }
 
 
-struct FileClient {
+public struct FileClient {
   // optional because the file may not exist on disk
   // we're a not using Effect<FavoritePrimesAction> so that the FileClient is not tightly coupled with the favorite primes module and in the future we can extract it into its own module.
   var load: (String) -> Effect<Data?>
@@ -76,7 +77,7 @@ struct FileClient {
 
 // let's make a live version of the FileClient
 extension FileClient {
-  static let live = FileClient(
+  public static let live = FileClient(
     load: { fileName in
         .sync {
           let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -97,70 +98,36 @@ extension FileClient {
 }
 
 
-struct FavoritePrimesEnvironment {
-  var fileClient: FileClient
-}
+//public struct FavoritePrimesEnvironment {
+//  var fileClient: FileClient
+//}
 
-extension FavoritePrimesEnvironment {
-  static let live = FavoritePrimesEnvironment(fileClient: .live)
-}
+// we can upgrade this to a tuple in the future when we have more dependencies.
+public typealias FavoritePrimesEnvironment = FileClient
 
-var Current = FavoritePrimesEnvironment.live
+//extension FavoritePrimesEnvironment {
+//  public static let live = FavoritePrimesEnvironment(fileClient: .live)
+//}
+
+//var Current = FavoritePrimesEnvironment.live
 
 // let's create a mock version of fileclient so we can use in our tests
 // so that this mock code is only availabe in debug mode. (tests and playground)
 // and won't be accessible when running the code in live environment.
 #if DEBUG
-extension FavoritePrimesEnvironment {
-  static let mock = FavoritePrimesEnvironment(
-    fileClient: FileClient(
-      load: { _ in
-        Effect<Data?>.sync {
-          try! JSONEncoder().encode([2, 31])
-        }
-      },
-      save: { _, _ in
-          .fireAndForget {}
+extension FileClient {
+  static let mock = FileClient(
+    load: { _ in
+      Effect<Data?>.sync {
+        try! JSONEncoder().encode([2, 31])
       }
-    )
+    },
+    save: { _, _ in
+        .fireAndForget {}
+    }
   )
 }
 #endif
-
-
-// MARK: - Lightweight Dependency Injection refresher.
-//struct Environment {
-//  var date: () -> Date
-//}
-//
-//extension Environment {
-//  static let live = Environment { Date() }
-//}
-//
-//extension Environment {
-//  static let mock = Environment { Date(timeIntervalSince1970: 1234567890) }
-//}
-//
-//// global variable that represents the live implementation
-//#if DEBUG
-//var Current = Environment.live
-//#else
-//let Current = Environment.live
-//#endif
-
-//private func saveEffect(favoritePrimes: [Int]) -> Effect<FavoritePrimesAction> {
-//  return .fireAndForget {
-//    // In here we will perform the side effect that saves the favourite primes to disk.
-//    // we want to be able to serialise the primes.
-//    let data = try! JSONEncoder().encode(favoritePrimes)
-//
-//    // we want to save this data to a consistent url in the document directory.
-//    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-//    let documentsUrl = URL(fileURLWithPath: documentsPath)
-//    let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
-//    try! data.write(to: favoritePrimesUrl)
-//  }
-//}
 
 // Let's create an asynchronous effect helper type, similar to the fireAndForget helper.
 extension Effect {
@@ -170,15 +137,3 @@ extension Effect {
     }.eraseToEffect()
   }
 }
-
-
-//private let loadEffect = Effect<FavoritePrimesAction?>.sync {
-//  let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-//  let documentsUrl = URL(fileURLWithPath: documentsPath)
-//  let favoritePrimesUrl = documentsUrl.appendingPathComponent("favorite-primes.json")
-//  guard let data = try? Data(contentsOf: favoritePrimesUrl),
-//        let favoritePrimes = try? JSONDecoder().decode([Int].self, from: data)
-//  else { return nil }
-//
-//  return .loadedFavoritePrimes(favoritePrimes)
-//}

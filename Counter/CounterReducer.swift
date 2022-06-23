@@ -20,7 +20,11 @@ public typealias CounterState = (
 /// Reducers which describes all the business logic of our app and
 /// broken down into various components.
 /// Each is responsible for handling the state and actions of each of the three screens in our app.
-public func counterReducer(state: inout CounterState, action: CounterAction) -> [Effect<CounterAction>] {
+public func counterReducer(
+  state: inout CounterState,
+  action: CounterAction,
+  environment: CounterEnvironment
+) -> [Effect<CounterAction>] {
   switch action {
   case .decrTapped:
     state.count -= 1
@@ -34,7 +38,7 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
     state.isNthPrimeButtonDisabled = true
     return [
       //  nthPrime(state.count)
-      Current.nthPrime(state.count)
+      environment(state.count)
       // Cases on enums are basically functions from their associated value to the enum
         .map(CounterAction.nthPrimeResponse)
         .receive(on: DispatchQueue.main)
@@ -52,21 +56,35 @@ public func counterReducer(state: inout CounterState, action: CounterAction) -> 
   }
 }
 
-struct CounterEnvironment {
-  var nthPrime: (Int) -> Effect<Int?>
-}
+//public struct CounterEnvironment {
+//  var nthPrime: (Int) -> Effect<Int?>
+//}
 
-extension CounterEnvironment {
-  static let live = CounterEnvironment(nthPrime: Counter.nthPrime)
-}
+public typealias CounterEnvironment = (Int) -> Effect<Int?>
 
-var Current = CounterEnvironment.live
+//extension CounterEnvironment {
+//  public static let live = CounterEnvironment(nthPrime: Counter.nthPrime)
+//}
 
-extension CounterEnvironment {
-  static let mock = CounterEnvironment { _ in .sync { 17 } }
-}
+//var Current = CounterEnvironment.live
 
-public let counterViewReducer = combine(
-  pullback(counterReducer, value: \CounterViewState.counter, action: \CounterViewAction.counter),
-  pullback(primeModalReducer, value: \.primeModal, action: \.primeModal)
+// No more extension - we will just use mock version of the function in practice.
+//extension CounterEnvironment {
+//  static let mock = CounterEnvironment { _ in .sync { 17 } }
+//}
+
+
+public let counterViewReducer: Reducer<CounterViewState, CounterViewAction, CounterEnvironment> = combine(
+  pullback(
+    counterReducer,
+    value: \CounterViewState.counter,
+    action: \CounterViewAction.counter,
+    environment: { $0 }
+  ),
+  pullback(
+    primeModalReducer,
+    value: \.primeModal,
+    action: \.primeModal,
+    environment: { _ in () }
+  )
 )

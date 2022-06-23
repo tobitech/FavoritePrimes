@@ -28,7 +28,7 @@ struct WolframAlphaResult: Decodable {
 
 /// This network function is the sole side effect in our app so far.
 //func nthPrime(_ n: Int, callback: @escaping (Int?) -> Void) -> Void {
-func nthPrime(_ n: Int) -> Effect<Int?> {
+public func nthPrime(_ n: Int) -> Effect<Int?> {
   return wolframAlpha(query: "prime \(n)").map { result in
     result
       .flatMap {
