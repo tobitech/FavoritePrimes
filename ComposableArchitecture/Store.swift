@@ -16,7 +16,16 @@ struct Parallel<A> {
 /// to do mutation to the value as it needs based on the action that comes in
 /// but then it can return a closure that can bundle up some side effecting work
 /// that can then be executed later.
-public typealias Reducer<Value, Action, Environment> = (inout Value, Action, Environment) -> [Effect<Action>]
+//public typealias Reducer<Value, Action, Environment> = (inout Value, Action, Environment) -> [Effect<Action>]
+
+/// We're turning this into a type for ergonomics purposes.
+public struct Reducer<Value, Action, Environment> {
+  let reducer: (inout Value, Action, Environment) -> [Effect<Action>]
+  
+  public init(_ reducer: @escaping (inout Value, Action, Environment) -> [Effect<Action>]) {
+    self.reducer = reducer
+  }
+}
 
 /// This is the core library code that powers our app architecture.
 /// Store is a container for mutable app state and all the logic that can mutate it.
@@ -32,10 +41,10 @@ public final class Store<Value, Action>: ObservableObject {
   
   public init<Environment>(
     initialValue: Value,
-    reducer: @escaping Reducer<Value, Action, Environment>,
+    reducer: Reducer<Value, Action, Environment>,
     environment: Environment
   ) {
-    self.reducer = { value, action, environment in
+    self.reducer = .init { value, action, environment in
       // force casting here seems safe, because we know we're given a honest reducer with an honest environment.
       // check the exercises to see how we can do type erasure without force casting.
       reducer(&value, action, environment as! Environment)
@@ -67,13 +76,13 @@ public final class Store<Value, Action>: ObservableObject {
     }
   }
   
-  public func view<LocalValue, LocalAction>(
+  public func scope<LocalValue, LocalAction>(
     value toLocalValue: @escaping (Value) -> LocalValue,
     action toGlobalAction: @escaping (LocalAction) -> Action
   ) -> Store<LocalValue, LocalAction> {
     let localStore = Store<LocalValue, LocalAction>(
       initialValue: toLocalValue(self.value),
-      reducer: { localValue, localAction, _ in
+      reducer: .init { localValue, localAction, _ in
         self.send(toGlobalAction(localAction))
         localValue = toLocalValue(self.value)
         return [] // the act of creating a view shouldn't introduce any new side effect.
