@@ -12,7 +12,7 @@ class PrimeModalTests: XCTestCase {
   func testSaveFavoritePrimesTapped() throws {
     var state = (count: 2, favoritePrimes: [3, 5])
     
-    let effects = primeModalReducer(state: &state, action: .saveFavoritePrimeTapped)
+    let effects = primeModalReducer(state: &state, action: .saveFavoritePrimeTapped, environment: ())
     
     // since we're using a tuple, it's expedient we destructure the model
     // in case we add new fields so that we can get a compiler error
@@ -31,7 +31,7 @@ class PrimeModalTests: XCTestCase {
   func testRemoveFavoritePrimesTapped() throws {
     var state = (count: 3, favoritePrimes: [3, 5])
     
-    let effects = primeModalReducer(state: &state, action: .removeFavoritePrimeTapped)
+    let effects = primeModalReducer(state: &state, action: .removeFavoritePrimeTapped, environment: ())
     let (count, favoritePrimes) = state
     
     XCTAssertEqual(count, 3)
